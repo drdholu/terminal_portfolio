@@ -1,0 +1,198 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Theme definitions with selection colors */
+  :root[data-theme="matrix"] {
+    --background: 0 0% 0%;
+    --foreground: 120 100% 50%;
+    --muted: 120 100% 13%;
+    --muted-foreground: 120 100% 40%;
+    --accent: 120 100% 40%;
+    --accent-foreground: 0 0% 100%;
+    --border: 120 100% 20%;
+    --window-control: 120 100% 40%;
+  }
+
+  :root[data-theme="matrix"] *::selection {
+    background-color: hsl(120 100% 25%);
+    color: hsl(120 100% 90%);
+  }
+
+  :root[data-theme="dracula"] {
+    --background: 231 15% 18%;
+    --foreground: 60 30% 96%;
+    --muted: 232 14% 31%;
+    --muted-foreground: 60 30% 96%;
+    --accent: 265 89% 78%;
+    --accent-foreground: 0 0% 100%;
+    --border: 231 15% 18%;
+    --window-control: 265 89% 78%;
+  }
+
+  :root[data-theme="dracula"] *::selection {
+    background-color: hsl(265 89% 58%);
+    color: hsl(60 30% 96%);
+  }
+
+  :root[data-theme="monokai"] {
+    --background: 70 8% 15%;
+    --foreground: 60 30% 96%;
+    --muted: 55 11% 29%;
+    --muted-foreground: 60 30% 96%;
+    --accent: 54 70% 68%;
+    --accent-foreground: 0 0% 100%;
+    --border: 55 11% 29%;
+    --window-control: 54 70% 68%;
+  }
+
+  :root[data-theme="monokai"] *::selection {
+    background-color: hsl(54 70% 48%);
+    color: hsl(70 8% 15%);
+  }
+
+  :root[data-theme="nord"] {
+    --background: 220 16% 22%;
+    --foreground: 218 27% 94%;
+    --muted: 220 16% 28%;
+    --muted-foreground: 218 27% 94%;
+    --accent: 199 34% 67%;
+    --accent-foreground: 0 0% 100%;
+    --border: 220 16% 28%;
+    --window-control: 199 34% 67%;
+  }
+
+  :root[data-theme="nord"] *::selection {
+    background-color: hsl(199 34% 47%);
+    color: hsl(218 27% 94%);
+  }
+
+  :root[data-theme="solarizedDark"] {
+    --background: 193 100% 11%;
+    --foreground: 194 14% 55%;
+    --muted: 193 100% 14%;
+    --muted-foreground: 194 14% 55%;
+    --accent: 45 100% 35%;
+    --accent-foreground: 0 0% 100%;
+    --border: 194 14% 55%;
+    --window-control: 45 100% 35%;
+  }
+
+  :root[data-theme="solarizedDark"] *::selection {
+    background-color: hsl(45 100% 25%);
+    color: hsl(194 14% 95%);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Rest of the existing styles */
+.matrix-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.15;
+}
+
+.terminal-window {
+  @apply bg-background/80 text-foreground rounded-lg shadow-xl backdrop-blur-sm border border-border overflow-hidden;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.window-header {
+  @apply flex items-center px-4 py-2 bg-muted/50 border-b border-border;
+}
+
+.window-title {
+  @apply flex-1 text-center text-sm font-medium text-foreground/70;
+}
+
+.window-controls {
+  @apply flex items-center space-x-2 absolute left-4;
+}
+
+.window-button {
+  @apply w-3 h-3 rounded-full transition-colors;
+}
+
+.window-button-close {
+  @apply bg-red-500 hover:bg-red-600;
+}
+
+.window-button-minimize {
+  @apply bg-yellow-500 hover:bg-yellow-600;
+}
+
+.window-button-maximize {
+  @apply bg-green-500 hover:bg-green-600;
+}
+
+.window-content {
+  @apply p-6;
+}
+
+.terminal-prompt::before {
+  content: "$ ";
+  @apply text-accent;
+}
+
+.blink {
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.cmd-palette {
+  @apply fixed top-4 left-1/2 -translate-x-1/2 w-full max-w-2xl bg-background/90 rounded-lg shadow-2xl border border-border overflow-hidden backdrop-blur-sm;
+}
+
+.terminal-section {
+  @apply mb-8 opacity-0;
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.highlight {
+  @apply text-accent font-bold;
+}
+
+.command-item {
+  @apply px-4 py-2 hover:bg-muted cursor-pointer transition-colors;
+}
+
+.section-title::before {
+  content: "## ";
+  @apply text-accent;
+}
+
+.matrix-rain {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.2em;
+  text-shadow: 0 0 5px currentColor;
+}
