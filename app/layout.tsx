@@ -9,8 +9,8 @@ import ThemeSelector from "@/components/theme-selector";
 const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Terminal Portfolio",
-  description: "A terminal-style portfolio website",
+  title: "Paras",
+  description: "Paras' Portfolio",
 };
 
 export default function RootLayout({
