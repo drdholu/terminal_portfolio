@@ -40,7 +40,7 @@ export default function Home() {
           <motion.section id="about" variants={item} className="terminal-section">
             <h2 className="section-title text-xl mb-4">About Me</h2>
             <p className="mb-4">
-              Hi! I'm a <span className="highlight">Software Developer</span> with a passion for building
+              Hi! I&apos;m a <span className="highlight">Software Developer</span> with a passion for building
               innovative solutions. Currently pursuing my <span className="highlight">Computer Science degree</span>
               at Example University.
             </p>
