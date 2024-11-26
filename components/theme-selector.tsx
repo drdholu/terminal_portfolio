@@ -31,7 +31,7 @@ export default function ThemeSelector() {
               key={themeName}
               onClick={() => handleThemeChange(themeName as ThemeName)}
               className={`w-full px-4 py-2 text-left rounded hover:bg-muted transition-colors ${
-                themeName === theme ? 'bg-muted' : ''
+                themeName === theme.name ? 'bg-muted' : ''
               }`}
             >
               {theme.name}

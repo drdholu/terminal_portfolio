@@ -37,12 +37,16 @@ export default function Home() {
         </div>
         
         <div className="window-content">
+          <motion.div variants={item} className="mb-8 text-center text-accent/50 text-sm">
+            <p>Press <kbd className="px-2 py-1 bg-accent/10 rounded">Ctrl/⌘</kbd> + <kbd className="px-2 py-1 bg-accent/10 rounded">K</kbd> to open command palette</p>
+          </motion.div>
+
           <motion.section id="about" variants={item} className="terminal-section">
             <h2 className="section-title text-xl mb-4">About Me</h2>
             <p className="mb-4">
               Hi! I&apos;m a <span className="highlight">Software Developer</span> with a passion for building
-              innovative solutions. Currently pursuing my <span className="highlight">Computer Science degree</span>
-              at Example University.
+              innovative solutions. Currently pursuing my <span className="highlight">Computer Science degree </span>
+              at COEP Technological University.
             </p>
             <p>
               Core skills: <span className="highlight">TypeScript</span>, <span className="highlight">React</span>,
@@ -53,9 +57,9 @@ export default function Home() {
           <motion.section id="responsibilities" variants={item} className="terminal-section">
             <h2 className="section-title text-xl mb-4">Positions of Responsibility</h2>
             <ul className="list-disc list-inside space-y-2">
-              <li>Technical Lead @ Developer Student Club</li>
-              <li>Open Source Contributor @ Example Organization</li>
-              <li>Student Mentor @ University Programming Club</li>
+              <li>Software Dev @ Students Developer Section</li>
+              <li>Web Head @ Impressions</li>
+              <li>Web Coord @ ASCII</li>
             </ul>
           </motion.section>
 
@@ -95,10 +99,6 @@ export default function Home() {
               </a>
             </div>
           </motion.section>
-
-          <motion.div variants={item} className="mt-8 text-center text-accent/50 text-sm">
-            <p>Press <kbd className="px-2 py-1 bg-accent/10 rounded">Ctrl/⌘</kbd> + <kbd className="px-2 py-1 bg-accent/10 rounded">K</kbd> to open command palette</p>
-          </motion.div>
         </div>
       </motion.div>
     </main>
