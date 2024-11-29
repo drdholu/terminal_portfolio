@@ -2,86 +2,144 @@
 
 import { motion } from "framer-motion";
 
-interface Section {
-  title: string;
-  content: React.ReactNode;
+interface InfoType {
+  Skills: { details: { name: string; technologies: string[]; }[]; };
+  Projects: { details: { name: string; status: string; link: string; description: string; technologies: string[]; }[]; };
+  "Positions of Responsibility": { details: { position: string; organization: string; duration: string; responsibilities: string[]; }[]; };
+  Education: { details: { degree: string; institution: string; expected_graduation: string; cgpa: string; }[]; };
+  Contact: { details: { location: string; linkedin: string; github: string; } };
 }
 
-const sections: Record<string, Section> = {
-  about: {
-    title: "About Me",
-    content: (
-      <>
-        <p className="mb-4">
-          Hi! I&apos;m a <span className="highlight">Software Developer</span> with a passion for building
-          innovative solutions. Currently pursuing my <span className="highlight">Computer Science degree </span>
-          at COEP.
-        </p>
-        <p>
-          Core skills: <span className="highlight">TypeScript</span>, <span className="highlight">React</span>,
-          <span className="highlight">Node.js</span>, <span className="highlight">Python</span>
-        </p>
-      </>
-    ),
-  },
-  respon: {
-    title: "Positions of Responsibility",
-    content: (
-      <ul className="list-disc list-inside space-y-2">
-        <li>Technical Lead @ Developer Student Club</li>
-        <li>Open Source Contributor @ Example Organization</li>
-        <li>Student Mentor @ University Programming Club</li>
-      </ul>
-    ),
-  },
-  proj: {
-    title: "Projects",
-    content: (
-      <div className="space-y-4">
-        <div className="p-4 border border-border rounded">
-          <h3 className="text-lg font-bold mb-2">Project Name</h3>
-          <p className="text-foreground/80">A brief description of the project and its impact.</p>
-          <div className="mt-2 space-x-2">
-            <span className="text-xs bg-accent/10 px-2 py-1 rounded">React</span>
-            <span className="text-xs bg-accent/10 px-2 py-1 rounded">Node.js</span>
-            <span className="text-xs bg-accent/10 px-2 py-1 rounded">MongoDB</span>
-          </div>
-        </div>
-      </div>
-    ),
-  },
-  soc: {
-    title: "Socials",
-    content: (
-      <div className="flex space-x-4">
-        <a target="_blank" href="https://github.com/drdholu" className="hover:text-accent transition-colors">GitHub</a>
-        <a target="_blank" href="https://linkedin.com/in/parasdhole" className="hover:text-accent transition-colors">LinkedIn</a>
-      </div>
-    ),
-  },
-  cont: {
-    title: "Contact Me",
-    content: (
-      <div className="space-y-2">
-        <p>Email: <a href="mailto:example@email.com" className="hover:text-accent transition-colors">example@email.com</a></p>
-      </div>
-    ),
-  },
-  help: {
-    title: "Available Commands",
-    content: (
-      <ul className="list-disc list-inside space-y-2">
-        <li>about - Display information about me</li>
-        <li>respon - Show my positions of responsibility</li>
-        <li>proj - View my projects</li>
-        <li>soc - Display social media links</li>
-        <li>cont - Show contact information</li>
-        <li>help - Display this help message</li>
-        <li>Ctrl + L - Clear the terminal</li>
-      </ul>
-    ),
-  },
+import info from "../../lib/user-info";
+import Link from "next/link";
+
+interface Section {
+  title?: string;
+  content?: React.ReactNode;
+}
+
+const sections: Record<string, Section> = {};
+
+Object.keys(info).forEach((key) => {
+    const commandKey = key.toLowerCase().replace(/\s+/g, '').slice(0, 3);
+    sections[commandKey] = {
+        title: key,
+        content: renderContent(key, (info as InfoType)[key as keyof InfoType])
+    };
+});
+
+sections["help"] = {
+  title: "Available Commands",
+  content: (
+    <ul className="list-disc list-inside space-y-2">
+      {Object.keys(sections).map((cmd) => (
+        <li key={cmd}>{cmd} - Display {sections[cmd].title}</li>
+      ))}
+      <li>cls or <span className="text-primary">Ctrl + L</span> - Clear the terminal</li>
+    </ul>
+  ),
 };
+
+function renderContent(key: string, data: any): React.ReactNode {
+  switch (key) {
+    case "Skills":
+      return (
+        <div>
+          {data.details.map((skill: any) => (
+            <div key={skill.name}>
+              <h3 className="text-lg font-bold">{skill.name}</h3>
+              <ul className="list-disc list-inside ml-4">
+                {skill.technologies.map((tech: string) => (
+                  <li key={tech}>{tech}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      );
+    case "Projects":
+      return (
+        <div>
+          {data.details.map((project: any) => (
+            <div key={project.name} className="p-4 border border-border rounded mb-4">
+              <Link href={project.link} target="_blank" className="text-lg font-bold">
+                {project.name} {project.status && <span>({project.status})</span>}
+              </Link>
+              <p className="text-foreground/80">{project.description}</p>
+              {project.technologies && (
+                <div className="mt-2 space-x-2">
+                  {project.technologies.map((tech: string) => (
+                    <span key={tech} className="text-xs bg-accent/10 px-2 py-1 rounded">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      );
+    case "Positions of Responsibility":
+      return (
+        <div>
+          {data.details.map((role: any) => (
+            <div key={role.position} className="mb-4">
+              <h3 className="text-lg font-bold">{role.position}</h3>
+              <p className="text-foreground/80">
+                {role.organization} | {role.duration}
+              </p>
+              <ul className="list-disc list-inside ml-4">
+                {role.responsibilities.map((resp: string) => (
+                  <li key={resp}>{resp}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      );
+    case "Education":
+      return (
+        <div>
+          {data.details.map((edu: any) => (
+            <div key={edu.degree} className="mb-4">
+              <h3 className="text-lg font-bold">{edu.degree}</h3>
+              <p className="text-foreground/80">{edu.institution}</p>
+              <p>Expected Graduation: {edu.expected_graduation}</p>
+              <p>CGPA: {edu.cgpa}</p>
+            </div>
+          ))}
+        </div>
+      );
+    case "Contact":
+      return (
+        <div className="space-y-2">
+          <p>Location: {data.details.location}</p>
+          <p>
+            LinkedIn:{" "}
+            <a
+              target="_blank"
+              href={`https://${data.details.linkedin}`}
+              className="hover:text-accent transition-colors"
+            >
+              {data.details.linkedin}
+            </a>
+          </p>
+          <p>
+            GitHub:{" "}
+            <a
+              target="_blank"
+              href={`https://${data.details.github}`}
+              className="hover:text-accent transition-colors"
+            >
+              {data.details.github}
+            </a>
+          </p>
+        </div>
+      );
+    default:
+      return <div>No content available.</div>;
+  }
+}
 
 interface TerminalSectionsProps {
   command: string;

@@ -9,9 +9,8 @@ export default function TerminalIntro() {
       animate={{ opacity: 1 }}
       className="mb-8 text-foreground"
     >
-      <pre className="font-mono mb-4 overflow-y-scroll">
-{`
-           __________                                 
+      <pre className="font-mono mb-4 overflow-x-scroll">
+{`           __________                                 
          .'----------'.                              
          | .--------. |                             
          | |########| |       __________              
@@ -29,9 +28,9 @@ export default function TerminalIntro() {
       <p className="">hi i&apos;m <span className="text-accent">paras</span></p>
       <p className="mb-2">pursuing cse in pune & a web dev</p>
       <p className="mb-2">type <span className="text-accent">help</span> to learn more about me.</p>
-      <div className="text-muted">
+      {/* <div className="text-muted">
         <p>Press <kbd className="px-2 py-1 bg-accent/10 rounded">Ctrl</kbd> + <kbd className="px-2 py-1 bg-accent/10 rounded">L</kbd> to clear the terminal.</p>
-      </div>
+      </div> */}
     </motion.div>
   );
 }

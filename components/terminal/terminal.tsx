@@ -27,6 +27,13 @@ export default function Terminal() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
+  useEffect(() => {
+    if (input.trim().toLowerCase() === "cls" || input.trim().toLowerCase() === "clear") {
+        setHistory([]);
+        setInput("");
+    }
+  }, [input]);
+
   const handleCommand = (command: string) => {
     if (command.trim()) {
       setHistory((prev) => [...prev, command.trim().toLowerCase()]);
