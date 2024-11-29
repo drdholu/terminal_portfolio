@@ -22,7 +22,7 @@ export default function MatrixBackground() {
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    const chars = '01';
+    const chars = '23';
     const fontSize = 14;
     const columns = canvas.width / fontSize;
     const drops: number[] = [];

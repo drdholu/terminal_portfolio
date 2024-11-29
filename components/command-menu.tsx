@@ -58,7 +58,7 @@ export default function CommandMenu() {
           style={{ pointerEvents: open ? "auto" : "none" }}
         >
           <div className="fixed inset-0 bg-black/50" onClick={() => setOpen(false)} />
-          <Command className="cmd-palette">
+          {/* <Command className="cmd-palette">
             <div className="flex items-center border-b border-green-500/20 px-4">
               <span className="text-green-500 mr-2">$</span>
               <Command.Input
@@ -84,7 +84,7 @@ export default function CommandMenu() {
                 </Command.Item>
               ))}
             </Command.List>
-          </Command>
+          </Command> */}
         </motion.div>
       )}
     </AnimatePresence>
