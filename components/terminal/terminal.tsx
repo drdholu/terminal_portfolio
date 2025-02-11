@@ -43,12 +43,12 @@ export default function Terminal() {
   return (
     <div className="terminal-window">
       <div className="window-header">
+        <div className="window-title">portfolio@terminal ~ -bash</div>
         <div className="window-controls">
           <div className="window-button window-button-close" />
           <div className="window-button window-button-minimize" />
           <div className="window-button window-button-maximize" />
         </div>
-        <div className="window-title">terminal@portfolio ~ -zsh</div>
       </div>
       
       <div className="window-content">

@@ -28,7 +28,7 @@ Object.keys(info).forEach((key) => {
     };
 });
 
-sections["help"] = {
+const helpContent = {
   title: "Available Commands",
   content: (
     <ul className="list-disc list-inside space-y-2">
@@ -39,6 +39,9 @@ sections["help"] = {
     </ul>
   ),
 };
+
+sections["help"] = helpContent;
+sections["ls"] = helpContent;
 
 function renderContent(key: string, data: any): React.ReactNode {
   switch (key) {

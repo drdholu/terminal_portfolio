@@ -132,12 +132,12 @@
 }
 
 .terminal-window {
-  @apply bg-background/80 text-foreground rounded-lg shadow-xl backdrop-blur-sm border border-border overflow-hidden;
+  @apply max-h-[36em] bg-background/80 text-foreground rounded-lg shadow-xl backdrop-blur-sm border border-border overflow-x-scroll;
   font-family: 'JetBrains Mono', monospace;
 }
 
 .window-header {
-  @apply flex items-center px-4 py-2 bg-muted/50 border-b border-border;
+  @apply sticky top-0 flex items-center px-4 py-2 bg-muted/80 border-b border-border;
 }
 
 .window-title {

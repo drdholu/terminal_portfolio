@@ -57,7 +57,7 @@ export default function CommandMenu() {
           className="fixed inset-0 z-50"
           style={{ pointerEvents: open ? "auto" : "none" }}
         >
-          <div className="fixed inset-0 bg-black/50" onClick={() => setOpen(false)} />
+          <div className="fixed inset-0 bg-black/50" onClick={() => {setOpen(false)}} />
           {/* <Command className="cmd-palette">
             <div className="flex items-center border-b border-green-500/20 px-4">
               <span className="text-green-500 mr-2">$</span>
