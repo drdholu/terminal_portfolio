@@ -17,12 +17,6 @@ export default function TerminalIntro() {
   ██╔═══╝  ██╔══██║ ██╔══██╗ ██╔══██║ ╚════██║
   ██║      ██║  ██║ ██║  ██║ ██║  ██║ ███████║
   ╚═╝      ╚═╝  ╚═╝ ╚═╝  ╚═╝ ╚═╝  ╚═╝ ╚══════╝
-  [=====================================]
-   |█| SYSTEM.INITIALIZE -> COMPLETE |█|
-   |█| NEURAL.LINK -> ESTABLISHED   |█|
-   |█| MATRIX.ACCESS -> GRANTED     |█|
-  [=====================================]
-     <% DATA.STREAM.ACTIVE %>
 `}
       </pre>
       <p className="">hi i&apos;m <span className="text-accent">paras</span></p>
