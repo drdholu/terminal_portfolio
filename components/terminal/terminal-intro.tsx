@@ -1,12 +1,34 @@
 "use client";
 
-import useSWR from 'swr';
 import { motion } from "framer-motion";
+import { Music } from 'lucide-react';
 
+interface SpotifyData {
+  isPlaying: boolean;
+  title: string;
+  artist: string;
+  albumImageUrl: string;
+  songUrl: string;
+}
 
-export default function TerminalIntro() {
-  const fetcher = (url: RequestInfo | URL) => fetch(url).then((r) => r.json());
-  const { data, error } = useSWR('/api/spotify', fetcher, { refreshInterval: 10000 });
+interface TerminalIntroProps {
+  spotifyData: SpotifyData | undefined;
+}
+
+export default function TerminalIntro({ spotifyData }: TerminalIntroProps) {
+  if (!spotifyData) {
+    return <div className="animate-pulse">Loading...</div>;
+  }
+
+  if (!spotifyData?.isPlaying) {
+    return (
+      <div className="flex items-center gap-2 text-gray-500">
+        <Music size={20} />
+        <span>Not playing</span>
+      </div>
+    );
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -25,11 +47,8 @@ export default function TerminalIntro() {
       </pre>
       <p className="">hi i&apos;m <span className="text-accent">paras</span></p>
       <p className="mb-2">pursuing cse in pune & a web dev</p>
-      {/* <p className="mb-2">im currently listening to <span className="text-accent lowercase">{data.title}</span></p> */}
+      <p className="mb-2">im currently listening to <span className="text-accent lowercase">{spotifyData.title}</span></p>
       <p className="mb-2">type <span className="text-accent">help or ls</span> to learn more about me.</p>
-      {/* <div className="text-muted">
-        <p>Press <kbd className="px-2 py-1 bg-accent/10 rounded">Ctrl</kbd> + <kbd className="px-2 py-1 bg-accent/10 rounded">L</kbd> to clear the terminal.</p>
-      </div> */}
     </motion.div>
   );
 }
