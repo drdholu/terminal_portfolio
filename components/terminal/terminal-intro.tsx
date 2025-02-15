@@ -9,7 +9,7 @@ export default function TerminalIntro() {
       animate={{ opacity: 1 }}
       className="mb-8 text-foreground"
     >
-      <pre className="font-mono mb-4 overflow-x-scroll">
+      <pre className="font-mono mb-4 overflow-hidden">
   {`                                        
   ██████╗   █████╗  ██████╗   █████╗  ███████╗
   ██╔══██╗ ██╔══██╗ ██╔══██╗ ██╔══██╗ ██╔════╝
