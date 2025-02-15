@@ -5,7 +5,6 @@ import TerminalIntro from "./terminal-intro";
 import TerminalInput from "./terminal-input";
 import TerminalCommand from "./terminal-command";
 import TerminalSections from "./terminal-sections";
-import useSWR from 'swr';
 
 interface HistoryItem {
   command: string;
@@ -15,8 +14,6 @@ interface HistoryItem {
 export default function Terminal() {
   const [input, setInput] = useState("");
   const [history, setHistory] = useState<string[]>([]);
-  const fetcher = (url: RequestInfo | URL) => fetch(url).then((r) => r.json());
-  const { data, error } = useSWR('/api/spotify', fetcher, { refreshInterval: 30000 });
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -55,7 +52,7 @@ export default function Terminal() {
       </div>
       
       <div className="window-content">
-        <TerminalIntro spotifyData={data} />
+        <TerminalIntro />
         
         {history.map((command, index) => (
           <div key={index}>
