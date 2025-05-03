@@ -131,17 +131,32 @@
   opacity: 0.15;
 }
 
+/* Enhanced Terminal UI Styles */
 .terminal-window {
-  @apply max-h-[36em] bg-background/80 text-foreground rounded-lg shadow-xl backdrop-blur-sm border border-border overflow-x-scroll;
+  @apply bg-background/80 text-foreground rounded-lg shadow-xl backdrop-blur-sm border border-border;
   font-family: 'JetBrains Mono', monospace;
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 
+              0 10px 10px -5px rgba(0, 0, 0, 0.2),
+              0 0 0 1px hsl(var(--border) / 0.3);
+  display: flex;
+  flex-direction: column;
+  height: 36em;
+  max-height: 80vh;
+  width: 100%;
+  overflow: hidden; /* Prevent terminal window from scrolling */
 }
 
 .window-header {
   @apply sticky top-0 flex items-center px-4 py-2 bg-muted/80 border-b border-border;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  flex-shrink: 0;
 }
 
 .window-title {
   @apply flex-1 text-center text-sm font-medium text-foreground/70;
+  letter-spacing: 0.5px;
 }
 
 .window-controls {
@@ -166,11 +181,81 @@
 
 .window-content {
   @apply p-6;
+  scroll-behavior: smooth;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex-grow: 1;
+  height: 100%;
+}
+
+.terminal-input-container {
+  position: sticky;
+  bottom: 0;
+  background-color: hsl(var(--background));
+  padding-top: 0.5rem;
+  z-index: 10;
+  margin-top: 1rem;
+}
+
+.window-content::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.window-content::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.window-content::-webkit-scrollbar-thumb {
+  background-color: hsl(var(--accent) / 0.3);
+  border-radius: 3px;
+  transition: background-color 0.3s;
+}
+
+.window-content::-webkit-scrollbar-thumb:hover {
+  background-color: hsl(var(--accent) / 0.5);
+}
+
+.terminal-entry {
+  margin-bottom: 1.5rem;
+}
+
+.terminal-entry:last-of-type {
+  margin-bottom: 1rem;
+}
+
+.terminal-prompt {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
 }
 
 .terminal-prompt::before {
   content: "$ ";
   @apply text-accent;
+  margin-right: 0.25rem;
+  font-weight: bold;
+}
+
+.command-input {
+  position: relative;
+  overflow: hidden;
+}
+
+.command-input::after {
+  content: "";
+  position: absolute;
+  width: 0.5em;
+  height: 1.2em;
+  background-color: hsl(var(--accent));
+  right: 0;
+  bottom: 0;
+  animation: cursor-blink 1.2s step-end infinite;
+}
+
+@keyframes cursor-blink {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
 }
 
 .blink {
@@ -211,13 +296,178 @@
   @apply px-4 py-2 hover:bg-muted cursor-pointer transition-colors;
 }
 
+/* Enhanced section styles */
+.section-title {
+  position: relative;
+  padding-left: 0.5rem;
+  margin-bottom: 1rem;
+}
+
 .section-title::before {
   content: "## ";
   @apply text-accent;
+  position: relative;
+  font-weight: bold;
+}
+
+/* Command history enhancement */
+.command-history {
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px dashed hsl(var(--border));
+}
+
+/* Enhanced link styles */
+a {
+  position: relative;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: hsl(var(--accent));
+}
+
+a:hover::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: currentColor;
+  transform-origin: bottom left;
+  animation: link-underline 0.3s ease forwards;
+}
+
+@keyframes link-underline {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* Enhance project cards */
+.project-card {
+  @apply p-4 border border-border rounded mb-4;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.project-card:hover {
+  @apply border-accent/30 bg-accent/5;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.project-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 0;
+  background-color: hsl(var(--accent));
+  transition: height 0.3s ease;
+}
+
+.project-card:hover::before {
+  height: 100%;
+}
+
+/* Tech tags enhancement */
+.tech-tag {
+  @apply text-xs bg-accent/10 px-2 py-1 rounded;
+  transition: all 0.2s ease;
+  display: inline-block;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.tech-tag:hover {
+  @apply bg-accent/20;
+  transform: scale(1.05);
 }
 
 .matrix-rain {
   font-family: 'JetBrains Mono', monospace;
   font-size: 1.2em;
   text-shadow: 0 0 5px currentColor;
+}
+
+/* Terminal-style list item markers */
+.list-disc {
+  list-style-type: none;
+}
+
+.list-disc li {
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.list-disc li::before {
+  content: ">";
+  position: absolute;
+  left: 0;
+  color: hsl(var(--accent));
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: bold;
+}
+
+/* Alternative terminal list styles */
+.list-dash li::before {
+  content: "->  ";
+}
+
+.list-arrow li::before {
+  content: "=>  ";
+}
+
+.list-caret li::before {
+  content: ">  ";
+}
+
+.list-dollar li::before {
+  content: "$  ";
+}
+
+.list-hash li::before {
+  content: "#  ";
+}
+
+.list-asterisk li::before {
+  content: "*  ";
+}
+
+/* For nested lists */
+.list-disc .list-disc li::before {
+  content: ">>"; /* Nested bullets */
+}
+
+/* Command output style for lists */
+.command-output li::before {
+  content: "···";
+  letter-spacing: -1px;
+}
+
+/* Terminal path style list */
+.list-path li::before {
+  content: "~/";
+}
+
+/* Terminal style tree list for directories */
+.list-tree li {
+  position: relative;
+  padding-left: 1.75rem;
+}
+
+.list-tree li::before {
+  content: "├─";
+  position: absolute;
+  left: 0;
+  color: hsl(var(--accent));
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.list-tree li:last-child::before {
+  content: "└─";
 }

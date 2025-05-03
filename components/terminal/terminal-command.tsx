@@ -9,12 +9,12 @@ interface TerminalCommandProps {
 export default function TerminalCommand({ command }: TerminalCommandProps) {
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className="flex items-center mb-2 font-mono"
+      initial={{ opacity: 0, y: -5 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.2 }}
+      className="command-history"
     >
-      <span className="text-accent mr-2">$</span>
-      <span>{command}</span>
+      <p className="terminal-prompt text-foreground/90">{command}</p>
     </motion.div>
   );
 }

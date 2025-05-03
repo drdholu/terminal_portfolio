@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import CommandMenu from "@/components/command-menu";
 import MatrixBackground from "@/components/matrix-background";
 import ThemeSelector from "@/components/theme-selector";
+import MouseBlob from "@/components/mouse-blob";
 
 const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"] });
 
@@ -28,6 +29,7 @@ export default function RootLayout({
           themes={["matrix", "dracula", "monokai", "nord", "solarizedDark"]}
         >
           <MatrixBackground />
+          <MouseBlob />
           <CommandMenu />
           <ThemeSelector />
           {children}
