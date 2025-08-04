@@ -1,8 +1,61 @@
 "use client";
 
 import { motion } from "framer-motion";
+import useSWR from "swr";
+import { useEffect, useState } from "react";
+
+interface SpotifySong {
+  name: string;
+  artist: string;
+  album: string;
+  url: string;
+  image: string;
+  played_at: string;
+}
+
+const fetcher = (url: string) =>
+  fetch(url).then((res) => {
+    if (!res.ok) throw new Error("Failed to fetch");
+    return res.json();
+  });
 
 export default function TerminalIntro() {
+  const {
+    data: song,
+    error,
+    mutate,
+  } = useSWR<SpotifySong>("/api/spotify", fetcher, {
+    revalidateOnFocus: false,
+    dedupingInterval: 60000, // avoid refetching within 60 s
+  });
+
+  // After mount, seed SWR with any cached song to avoid empty UI while fetching
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("last-played-song");
+      if (stored) {
+        const cached: SpotifySong = JSON.parse(stored);
+        // Populate SWR cache without revalidation
+        mutate(cached, false);
+      }
+    } catch {
+      /* ignore */
+    }
+    // we only want to run this once on mount
+  }, [mutate]);
+
+
+  // Persist the latest fetched song for next visits
+  useEffect(() => {
+    if (song) {
+      try {
+        localStorage.setItem("last-played-song", JSON.stringify(song));
+      } catch {
+        /* ignore */
+      }
+    }
+  }, [song]);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -10,29 +63,61 @@ export default function TerminalIntro() {
       transition={{ duration: 0.5 }}
       className="mb-8 text-foreground"
     >
-      <motion.pre 
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3, duration: 0.5 }}
-        className="font-mono mb-4 overflow-hidden text-accent/90"
-      >
-  {`                                        
-  ██████╗   █████╗  ██████╗   █████╗  ███████╗
-  ██╔══██╗ ██╔══██╗ ██╔══██╗ ██╔══██╗ ██╔════╝
-  ██████╔╝ ███████║ ██████╔╝ ███████║ ███████╗
-  ██╔═══╝  ██╔══██║ ██╔══██╗ ██╔══██║ ╚════██║
-  ██║      ██║  ██║ ██║  ██║ ██║  ██║ ███████║
-  ╚═╝      ╚═╝  ╚═╝ ╚═╝  ╚═╝ ╚═╝  ╚═╝ ╚══════╝
-`}
-      </motion.pre>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.7, duration: 0.5 }}
       >
-        <p className="text-lg">hi i&apos;m <span className="text-accent font-bold">paras</span></p>
+        <p className="text-lg">
+          hi i&apos;m <span className="text-accent font-bold">paras</span>
+        </p>
         <p className="mb-2 text-foreground/90">pursuing cse in coep</p>
-        <p className="mb-2">type <span className="text-accent font-medium px-1.5 py-0.5 rounded bg-accent/10">help</span> or <span className="text-accent font-medium px-1.5 py-0.5 rounded bg-accent/10">ls</span> to learn more about me.</p>
+        <p className="mb-2">
+          type{" "}
+          <span className="text-accent font-medium px-1.5 py-0.5 rounded bg-accent/10">
+            help
+          </span>{" "}
+          or{" "}
+          <span className="text-accent font-medium px-1.5 py-0.5 rounded bg-accent/10">
+            ls
+          </span>{" "}
+          to learn more about me.
+        </p>
+      </motion.div>
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3, duration: 0.5 }}
+        className="my-6"
+      >
+
+        {error && !song && (
+          <div className="flex items-center space-x-2 p-3 rounded-lg bg-red-500/5 border border-red-500/20">
+            <div className="w-3 h-3 rounded-full bg-red-500/60"></div>
+            <p className="font-mono text-accent/90 text-sm">
+              Unable to fetch song from Spotify.
+            </p>
+          </div>
+        )}
+        {song && (
+          <div className="group p-3 rounded-lg bg-accent/5 border border-accent/20 hover:bg-accent/10 transition-colors duration-200">
+            <p className="font-mono text-accent/70 text-xs mb-2">currently listening to</p>
+            <div className="flex items-center space-x-3">
+              {song.image && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img 
+                  src={song.image} 
+                  alt={song.name} 
+                  className="w-12 h-12 rounded-md shadow-sm group-hover:shadow-md transition-shadow duration-200" 
+                />
+              )}
+              <div className="font-mono text-accent/90 overflow-hidden flex-1">
+                <p className="truncate font-medium">{song.name}</p>
+                <p className="text-sm truncate text-foreground/70">by {song.artist}</p>
+              </div>
+            </div>
+          </div>
+        )}
       </motion.div>
     </motion.div>
   );

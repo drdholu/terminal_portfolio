@@ -11,8 +11,13 @@ export default function MouseBlob() {
   const { theme = 'matrix' } = useTheme();
 
   // Get the current theme's accent color - recalculated when theme changes
-  const currentTheme = themes[theme as keyof typeof themes];
-  const accentColor = currentTheme?.colors.accent || '#00ff00';
+  const [accentColor, setAccentColor] = useState<string | null>(null);
+
+  // Resolve accent color only on client after mount to avoid hydration mismatch
+  useEffect(() => {
+    const currentTheme = themes[theme as keyof typeof themes];
+    setAccentColor(currentTheme?.colors.accent || '#00ff00');
+  }, [theme]);
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
@@ -63,8 +68,8 @@ export default function MouseBlob() {
       style={{
         width: '50px',
         height: '50px',
-        backgroundColor: accentColor,
-        boxShadow: `0 0 25px 8px ${accentColor}`,
+        backgroundColor: accentColor ?? 'transparent',
+        boxShadow: accentColor ? `0 0 25px 8px ${accentColor}` : 'none',
       }}
     />
   );
