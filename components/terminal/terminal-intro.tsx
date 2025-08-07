@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import useSWR from "swr";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 interface SpotifySong {
   name: string;
@@ -23,38 +23,12 @@ export default function TerminalIntro() {
   const {
     data: song,
     error,
-    mutate,
   } = useSWR<SpotifySong>("/api/spotify", fetcher, {
     revalidateOnFocus: false,
     dedupingInterval: 60000, // avoid refetching within 60 s
   });
 
-  // After mount, seed SWR with any cached song to avoid empty UI while fetching
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem("last-played-song");
-      if (stored) {
-        const cached: SpotifySong = JSON.parse(stored);
-        // Populate SWR cache without revalidation
-        mutate(cached, false);
-      }
-    } catch {
-      /* ignore */
-    }
-    // we only want to run this once on mount
-  }, [mutate]);
 
-
-  // Persist the latest fetched song for next visits
-  useEffect(() => {
-    if (song) {
-      try {
-        localStorage.setItem("last-played-song", JSON.stringify(song));
-      } catch {
-        /* ignore */
-      }
-    }
-  }, [song]);
 
   return (
     <motion.div
