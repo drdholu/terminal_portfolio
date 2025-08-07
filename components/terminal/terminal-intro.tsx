@@ -76,18 +76,18 @@ export default function TerminalIntro() {
         {song && (
           <div className="group p-3 rounded-lg bg-accent/5 border border-accent/20 hover:bg-accent/10 transition-colors duration-200">
             <p className="font-mono text-accent/70 text-xs mb-2">currently listening to</p>
-            <div className="flex items-center space-x-3">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-3">
               {song.image && (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img 
                   src={song.image} 
                   alt={song.name} 
-                  className="w-12 h-12 rounded-md shadow-sm group-hover:shadow-md transition-shadow duration-200" 
+                  className="w-16 h-16 sm:w-12 sm:h-12 rounded-md shadow-sm group-hover:shadow-md transition-shadow duration-200 flex-shrink-0" 
                 />
               )}
-              <div className="font-mono text-accent/90 overflow-hidden flex-1">
-                <p className="truncate font-medium">{song.name}</p>
-                <p className="text-sm truncate text-foreground/70">by {song.artist}</p>
+              <div className="font-mono text-accent/90 overflow-hidden flex-1 min-w-0">
+                <p className="truncate font-medium text-sm sm:text-base">{song.name}</p>
+                <p className="text-xs sm:text-sm truncate text-foreground/70">by {song.artist}</p>
               </div>
             </div>
           </div>
