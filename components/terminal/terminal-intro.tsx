@@ -1,32 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-import useSWR from "swr";
-import { useEffect } from "react";
+import { useSpotifySong } from "@/hooks/use-spotify";
 
-interface SpotifySong {
-  name: string;
-  artist: string;
-  album: string;
-  url: string;
-  image: string;
-  played_at: string;
-}
 
-const fetcher = (url: string) =>
-  fetch(url).then((res) => {
-    if (!res.ok) throw new Error("Failed to fetch");
-    return res.json();
-  });
 
 export default function TerminalIntro() {
-  const {
-    data: song,
-    error,
-  } = useSWR<SpotifySong>("/api/spotify", fetcher, {
-    revalidateOnFocus: false,
-    dedupingInterval: 60000, // avoid refetching within 60 s
-  });
+  const { song, isError: error } = useSpotifySong();
 
 
 
