@@ -10,7 +10,7 @@ import MouseBlob from "@/components/mouse-blob";
 const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Paras",
+  title: "it's Paras",
   description: "Paras' Portfolio",
 };
 
