@@ -6,6 +6,7 @@ import TerminalIntro from "./terminal-intro";
 import TerminalInput from "./terminal-input";
 import TerminalCommand from "./terminal-command";
 import TerminalSections from "./terminal-sections";
+import TerminalBlog from "./terminal-blog";
 
 interface HistoryItem {
   command: string;
@@ -16,6 +17,7 @@ export default function Terminal() {
   const [input, setInput] = useState("");
   const [history, setHistory] = useState<string[]>([]);
   const terminalContentRef = useRef<HTMLDivElement>(null);
+  const [blogMode, setBlogMode] = useState(false);
 
   // Auto scroll effect when history changes
   useEffect(() => {
@@ -44,9 +46,16 @@ export default function Terminal() {
   }, [input]);
 
   const handleCommand = (command: string) => {
-    if (command.trim()) {
-      setHistory((prev) => [...prev, command.trim().toLowerCase()]);
+    if (!command.trim()) return;
+    const cmd = command.trim().toLowerCase();
+
+    if (cmd === "blg") {
+      setBlogMode(true);
+      setInput("");
+      return;
     }
+
+    setHistory((prev) => [...prev, cmd]);
   };
 
   return (
@@ -73,22 +82,26 @@ export default function Terminal() {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3, duration: 0.5 }}
       >
-        <TerminalIntro />
-        
-        <div className="space-y-4">
-          {history.map((command, index) => (
-            <div key={index}>
-              <TerminalCommand command={command} />
-              <TerminalSections command={command} />
+        {blogMode ? (
+          <TerminalBlog onExit={() => setBlogMode(false)} scrollRef={terminalContentRef} />
+        ) : (
+          <>
+            <TerminalIntro />
+            <div className="space-y-4">
+              {history.map((command, index) => (
+                <div key={index}>
+                  <TerminalCommand command={command} />
+                  <TerminalSections command={command} />
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-        
-        <TerminalInput
-          value={input}
-          onChange={setInput}
-          onSubmit={handleCommand}
-        />
+            <TerminalInput
+              value={input}
+              onChange={setInput}
+              onSubmit={handleCommand}
+            />
+          </>
+        )}
       </motion.div>
     </motion.div>
   );

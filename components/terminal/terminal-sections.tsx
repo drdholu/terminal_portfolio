@@ -12,6 +12,7 @@ interface InfoType {
 
 import info from "../../lib/user-info";
 import Link from "next/link";
+import TerminalBlog from "./terminal-blog";
 
 interface Section {
   title?: string;
@@ -27,6 +28,12 @@ Object.keys(info).forEach((key) => {
         content: renderContent(key, (info as InfoType)[key as keyof InfoType])
     };
 });
+
+// Register blog section before generating help content
+sections["blg"] = {
+    title: "Blogs",
+    content: <TerminalBlog onExit={() => {}} />
+};
 
 const helpContent = {
   title: "Available Commands",
