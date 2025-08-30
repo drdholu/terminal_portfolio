@@ -19,7 +19,7 @@ const BLOGS: BlogEntry[] = [
 
 interface TerminalBlogProps {
   onExit: () => void;
-  scrollRef: React.RefObject<HTMLDivElement>;
+  scrollRef?: React.RefObject<HTMLDivElement>;
 }
 
 export default function TerminalBlog({ onExit, scrollRef }: TerminalBlogProps) {
@@ -28,8 +28,10 @@ export default function TerminalBlog({ onExit, scrollRef }: TerminalBlogProps) {
 
   // Auto-scroll similar to main terminal using provided ref
   useEffect(() => {
-    if (scrollRef.current) {
+    if (scrollRef?.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    } else {
+      window.scrollTo({ top: document.body.scrollHeight });
     }
   }, [history, scrollRef]);
 
