@@ -2,60 +2,57 @@
 
 import { motion } from "framer-motion";
 import { useSpotifySong } from "@/hooks/use-spotify";
-
-
+import { fadeInVariants, slideDownVariants, transitions, commonClasses } from "@/lib/ui-constants";
 
 export default function TerminalIntro() {
   const { song, isError: error } = useSpotifySong();
 
-
-
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
+      variants={fadeInVariants}
+      initial="hidden"
+      animate="show"
+      transition={transitions.slow}
       className="mb-8 text-foreground"
     >
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.7, duration: 0.5 }}
+        variants={fadeInVariants}
+        initial="hidden"
+        animate="show"
+        transition={transitions.delayed}
       >
         <p className="text-lg">
-          hi i&apos;m <span className="text-accent font-bold">paras</span>
+          hi i&apos;m <span className={commonClasses.terminalPrompt}>paras</span>
         </p>
-        <p className="mb-2 text-foreground/90">pursuing cse in coep</p>
+        <p className={`mb-2 ${commonClasses.terminalText}`}>pursuing cse in coep</p>
         <p className="mb-2">
           type{" "}
-          <span className="text-accent font-medium px-1.5 py-0.5 rounded bg-accent/10">
-            help
-          </span>{" "}
+          <span className={commonClasses.tag}>help</span>{" "}
           or{" "}
-          <span className="text-accent font-medium px-1.5 py-0.5 rounded bg-accent/10">
-            ls
-          </span>{" "}
+          <span className={commonClasses.tag}>ls</span>{" "}
           to learn more about me.
         </p>
       </motion.div>
+      
       <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3, duration: 0.5 }}
+        variants={slideDownVariants}
+        initial="hidden"
+        animate="show"
+        transition={transitions.normal}
         className="my-6"
       >
-
         {error && !song && (
-          <div className="flex items-center space-x-2 p-3 rounded-lg bg-red-500/5 border border-red-500/20">
+          <div className={`${commonClasses.flexCenter} space-x-2 ${commonClasses.error}`}>
             <div className="w-3 h-3 rounded-full bg-red-500/60"></div>
             <p className="text-accent/90 text-sm">
               Unable to fetch song from Spotify.
             </p>
           </div>
         )}
+        
         {song && (
-          <div className="group p-3 rounded-lg bg-accent/5 border border-accent/20 hover:bg-accent/10 transition-colors duration-200">
-            <p className="text-accent/70 text-xs mb-2">currently listening to</p>
+          <div className={`group ${commonClasses.card} ${commonClasses.cardHover} bg-accent/5 border-accent/20`}>
+            <p className={`${commonClasses.terminalMuted} text-xs mb-2`}>currently listening to</p>
             <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-3">
               {song.image && (
                 // eslint-disable-next-line @next/next/no-img-element
@@ -67,7 +64,7 @@ export default function TerminalIntro() {
               )}
               <div className="text-accent/90 overflow-hidden flex-1 min-w-0">
                 <p className="truncate font-medium text-sm sm:text-base">{song.name}</p>
-                <p className="text-xs sm:text-sm truncate text-foreground/70">by {song.artist}</p>
+                <p className={`text-xs sm:text-sm truncate ${commonClasses.terminalMuted}`}>by {song.artist}</p>
               </div>
             </div>
           </div>

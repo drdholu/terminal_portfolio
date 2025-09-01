@@ -1,6 +1,7 @@
 "use client";
 
 import { KeyboardEvent, useEffect, useRef } from "react";
+import { terminalConfig, commonClasses } from "@/lib/ui-constants";
 
 interface TerminalInputProps {
   value: string;
@@ -42,15 +43,17 @@ export default function TerminalInput({ value, onChange, onSubmit }: TerminalInp
   };
 
   return (
-    <div className="flex items-center font-mono">
-      <span className="text-accent mr-2">$</span>
+    <div className={`${commonClasses.flexCenter} font-mono justify-start`}>
+      <span className={`${commonClasses.terminalPrompt} mr-2`}>
+        {terminalConfig.promptSymbol}
+      </span>
       <input
         ref={inputRef}
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         onKeyDown={handleKeyDown}
-        className="flex-1 bg-transparent border-none outline-none"
+        className={`flex-1 bg-transparent border-none outline-none ${commonClasses.terminalText}`}
         autoFocus
       />
     </div>

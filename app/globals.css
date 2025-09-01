@@ -148,19 +148,19 @@
 }
 
 .window-header {
-  @apply sticky top-0 flex items-center px-4 py-2 bg-muted/80 border-b border-border;
+  @apply sticky top-0 flex items-center justify-between px-4 py-2 bg-muted/80 border-b border-border relative;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   flex-shrink: 0;
 }
 
 .window-title {
-  @apply flex-1 text-center text-sm font-medium text-foreground/70;
+  @apply absolute left-1/2 transform -translate-x-1/2 text-sm font-medium text-foreground/70;
   letter-spacing: 0.5px;
 }
 
 .window-controls {
-  @apply flex items-center space-x-2 absolute left-4;
+  @apply flex items-center space-x-2;
 }
 
 .window-button {
@@ -230,13 +230,6 @@
   align-items: center;
 }
 
-.terminal-prompt::before {
-  content: "$ ";
-  @apply text-accent;
-  margin-right: 0.25rem;
-  font-weight: bold;
-}
-
 .command-input {
   position: relative;
   overflow: hidden;
@@ -301,13 +294,7 @@
   position: relative;
   padding-left: 0.5rem;
   margin-bottom: 1rem;
-}
-
-.section-title::before {
-  content: "## ";
-  @apply text-accent;
-  position: relative;
-  font-weight: bold;
+  @apply text-accent font-bold;
 }
 
 /* Command history enhancement */
@@ -345,18 +332,16 @@ a:hover::after {
   to { transform: scaleX(1); }
 }
 
-/* Enhance project cards */
+/* Enhanced project cards with hover effects */
 .project-card {
-  @apply p-4 border border-border rounded mb-4;
   transition: all 0.2s ease;
   position: relative;
   overflow: hidden;
 }
 
 .project-card:hover {
-  @apply border-accent/30 bg-accent/5;
   transform: translateY(-2px);
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .project-card::before {
@@ -372,20 +357,6 @@ a:hover::after {
 
 .project-card:hover::before {
   height: 100%;
-}
-
-/* Tech tags enhancement */
-.tech-tag {
-  @apply text-xs bg-accent/10 px-2 py-1 rounded;
-  transition: all 0.2s ease;
-  display: inline-block;
-  margin-right: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.tech-tag:hover {
-  @apply bg-accent/20;
-  transform: scale(1.05);
 }
 
 .matrix-rain {

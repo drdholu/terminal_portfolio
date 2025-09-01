@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { slideDownVariants, transitions, terminalConfig, commonClasses } from "@/lib/ui-constants";
 
 interface TerminalCommandProps {
   command: string;
@@ -9,12 +10,16 @@ interface TerminalCommandProps {
 export default function TerminalCommand({ command }: TerminalCommandProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: -5 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.2 }}
+      variants={slideDownVariants}
+      initial="hidden"
+      animate="show"
+      transition={transitions.fast}
       className="command-history"
     >
-      <p className="terminal-prompt text-foreground/90">{command}</p>
+      <p className={`terminal-prompt ${commonClasses.terminalText}`}>
+        <span className={commonClasses.terminalPrompt}>{terminalConfig.promptSymbol}</span>
+        {command}
+      </p>
     </motion.div>
   );
 }

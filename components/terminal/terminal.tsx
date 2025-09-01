@@ -7,6 +7,7 @@ import TerminalInput from "./terminal-input";
 import TerminalCommand from "./terminal-command";
 import TerminalSections from "./terminal-sections";
 import TerminalBlog from "./terminal-blog";
+import { slideUpVariants, fadeInVariants, transitions, terminalConfig } from "@/lib/ui-constants";
 
 interface HistoryItem {
   command: string;
@@ -39,7 +40,8 @@ export default function Terminal() {
   }, []);
 
   useEffect(() => {
-    if (input.trim().toLowerCase() === "cls" || input.trim().toLowerCase() === "clear") {
+    const cmd = input.trim().toLowerCase();
+    if (terminalConfig.clearCommands.includes(cmd)) {
         setHistory([]);
         setInput("");
     }
@@ -60,27 +62,29 @@ export default function Terminal() {
 
   return (
     <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
+      variants={slideUpVariants}
+      initial="hidden"
+      animate="show"
+      transition={transitions.slow}
       className="terminal-window"
     >
       <div className="window-header">
-        <div className="window-title">portfolio@terminal ~ -bash</div>
         <div className="window-controls">
           <div className="window-button window-button-close" />
           <div className="window-button window-button-minimize" />
           <div className="window-button window-button-maximize" />
         </div>
+        <div className="window-title">{terminalConfig.windowTitle}</div>
       </div>
       
       <motion.div 
         className="window-content"
         ref={terminalContentRef}
         style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.3, duration: 0.5 }}
+        variants={fadeInVariants}
+        initial="hidden"
+        animate="show"
+        transition={transitions.delayed}
       >
         {blogMode ? (
           <TerminalBlog onExit={() => setBlogMode(false)} scrollRef={terminalContentRef} />

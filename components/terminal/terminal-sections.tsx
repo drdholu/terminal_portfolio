@@ -1,6 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { slideUpVariants, transitions, commonClasses, listStyles, terminalConfig } from "@/lib/ui-constants";
+import Link from "next/link";
+import TerminalBlog from "./terminal-blog";
+import info from "../../lib/user-info";
 
 interface InfoType {
   Skills: { details: { name: string; technologies: string[]; }[]; };
@@ -9,10 +13,6 @@ interface InfoType {
   Education: { details: { degree: string; institution: string; expected_graduation: string; cgpa: string; }[]; };
   Contact: { details: { location: string; linkedin: string; github: string; } };
 }
-
-import info from "../../lib/user-info";
-import Link from "next/link";
-import TerminalBlog from "./terminal-blog";
 
 interface Section {
   title?: string;
@@ -38,11 +38,17 @@ sections["blg"] = {
 const helpContent = {
   title: "Available Commands",
   content: (
-    <ul className="list-caret space-y-2">
+    <ul className={`${listStyles.caret} space-y-2`}>
       {Object.keys(sections).map((cmd) => (
-        <li key={cmd}>{cmd} - Display {sections[cmd].title}</li>
+        <li key={cmd} className={commonClasses.interactive}>
+          <span className={commonClasses.terminalPrompt}>{cmd}</span> - Display {sections[cmd].title}
+        </li>
       ))}
-      <li>cls or <span className="text-primary">Ctrl + L</span> - Clear the terminal</li>
+      <li>
+        <span className={commonClasses.terminalPrompt}>
+          {terminalConfig.clearCommands.join(' or ')}
+        </span> or <span className={commonClasses.tag}>Ctrl + L</span> - Clear the terminal
+      </li>
     </ul>
   ),
 };
@@ -57,10 +63,10 @@ function renderContent(key: string, data: any): React.ReactNode {
         <div>
           {data.details.map((skill: any) => (
             <div key={skill.name} className="mb-4">
-              <h3 className="text-lg font-bold text-accent/90">{skill.name}</h3>
-              <ul className="list-asterisk ml-4 space-y-1">
+              <h3 className={`text-lg font-bold ${commonClasses.terminalPrompt}`}>{skill.name}</h3>
+              <ul className={`${listStyles.asterisk} ml-4 space-y-1`}>
                 {skill.technologies.map((tech: string) => (
-                  <li key={tech} className="hover:text-accent transition-colors">
+                  <li key={tech} className={commonClasses.interactive}>
                     {tech}
                   </li>
                 ))}
@@ -73,15 +79,15 @@ function renderContent(key: string, data: any): React.ReactNode {
       return (
         <div>
           {data.details.map((project: any) => (
-            <div key={project.name} className="project-card">
-              <Link href={project.link} target="_blank" className="text-lg font-bold group">
-                {project.name} {project.status && <span className="font-normal text-sm text-accent/70">({project.status})</span>}
+            <div key={project.name} className={`${commonClasses.card} ${commonClasses.cardHover} project-card`}>
+              <Link href={project.link} target="_blank" className={`text-lg font-bold group ${commonClasses.interactive}`}>
+                {project.name} {project.status && <span className={`font-normal text-sm ${commonClasses.terminalMuted}`}>({project.status})</span>}
               </Link>
-              <p className="text-foreground/80 mt-2">{project.description}</p>
+              <p className={`${commonClasses.terminalMuted} mt-2`}>{project.description}</p>
               {project.technologies && (
                 <div className="mt-3">
                   {project.technologies.map((tech: string) => (
-                    <span key={tech} className="tech-tag">
+                    <span key={tech} className={commonClasses.tag}>
                       {tech}
                     </span>
                   ))}
@@ -95,14 +101,14 @@ function renderContent(key: string, data: any): React.ReactNode {
       return (
         <div className="space-y-6">
           {data.details.map((role: any) => (
-            <div key={role.position} className="project-card">
-              <h3 className="text-lg font-bold text-accent/90">{role.position}</h3>
-              <p className="text-foreground/80">
-                <span className="font-medium">{role.organization}</span> | <span className="text-accent/70">{role.duration}</span>
+            <div key={role.position} className={`${commonClasses.card} ${commonClasses.cardHover} project-card`}>
+              <h3 className={`text-lg font-bold ${commonClasses.terminalPrompt}`}>{role.position}</h3>
+              <p className={commonClasses.terminalMuted}>
+                <span className="font-medium">{role.organization}</span> | <span className={commonClasses.terminalPrompt}>{role.duration}</span>
               </p>
-              <ul className="list-arrow ml-4 mt-2 space-y-1">
+              <ul className={`${listStyles.arrow} ml-4 mt-2 space-y-1`}>
                 {role.responsibilities.map((resp: string) => (
-                  <li key={resp} className="text-foreground/90">{resp}</li>
+                  <li key={resp} className={commonClasses.terminalText}>{resp}</li>
                 ))}
               </ul>
             </div>
@@ -113,12 +119,12 @@ function renderContent(key: string, data: any): React.ReactNode {
       return (
         <div>
           {data.details.map((edu: any) => (
-            <div key={edu.degree} className="project-card">
-              <h3 className="text-lg font-bold text-accent/90">{edu.degree}</h3>
-              <p className="text-foreground/90 font-medium">{edu.institution}</p>
+            <div key={edu.degree} className={`${commonClasses.card} ${commonClasses.cardHover} project-card`}>
+              <h3 className={`text-lg font-bold ${commonClasses.terminalPrompt}`}>{edu.degree}</h3>
+              <p className={`${commonClasses.terminalText} font-medium`}>{edu.institution}</p>
               <div className="mt-2 grid grid-cols-2 gap-2">
-                <p><span className="text-foreground/70">Expected Graduation:</span> {edu.expected_graduation}</p>
-                <p><span className="text-foreground/70">CGPA:</span> {edu.cgpa}</p>
+                <p><span className={commonClasses.terminalMuted}>Expected Graduation:</span> {edu.expected_graduation}</p>
+                <p><span className={commonClasses.terminalMuted}>CGPA:</span> {edu.cgpa}</p>
               </div>
             </div>
           ))}
@@ -126,26 +132,26 @@ function renderContent(key: string, data: any): React.ReactNode {
       );
     case "Contact":
       return (
-        <div className="space-y-3 project-card">
-          <p className="flex items-center gap-2">
-            <span className="text-foreground/70">📍 Location:</span> {data.details.location}
+        <div className={`space-y-3 ${commonClasses.card} ${commonClasses.cardHover} project-card`}>
+          <p className={commonClasses.flexCenter}>
+            <span className={commonClasses.terminalMuted}>📍 Location:</span> {data.details.location}
           </p>
-          <p className="flex items-center gap-2">
-            <span className="text-foreground/70">🔗 LinkedIn:</span> 
+          <p className={commonClasses.flexCenter}>
+            <span className={commonClasses.terminalMuted}>🔗 LinkedIn:</span> 
             <a
               target="_blank"
               href={`https://${data.details.linkedin}`}
-              className="hover:text-accent transition-colors"
+              className={commonClasses.interactive}
             >
               {data.details.linkedin}
             </a>
           </p>
-          <p className="flex items-center gap-2">
-            <span className="text-foreground/70">💻 GitHub:</span>
+          <p className={commonClasses.flexCenter}>
+            <span className={commonClasses.terminalMuted}>💻 GitHub:</span>
             <a
               target="_blank"
               href={`https://${data.details.github}`}
-              className="hover:text-accent transition-colors"
+              className={commonClasses.interactive}
             >
               {data.details.github}
             </a>
@@ -167,21 +173,23 @@ export default function TerminalSections({ command }: TerminalSectionsProps) {
   if (!section) {
     return (
       <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-        className="mb-4 text-red-500 p-3 border border-red-500/20 rounded bg-red-500/5"
+        variants={slideUpVariants}
+        initial="hidden"
+        animate="show"
+        transition={transitions.normal}
+        className={`mb-4 ${commonClasses.error}`}
       >
-        Command not found. Type &apos;help&apos; or &apos;ls&apos; to see available commands.
+        Command not found. Type <span className={commonClasses.tag}>help</span> or <span className={commonClasses.tag}>ls</span> to see available commands.
       </motion.div>
     );
   }
 
   return (
     <motion.section
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
+      variants={slideUpVariants}
+      initial="hidden"
+      animate="show"
+      transition={transitions.normal}
       className="mb-8"
     >
       {section.content}

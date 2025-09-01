@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import TerminalInput from "./terminal-input";
 import TerminalCommand from "./terminal-command";
-import { useClearShortcut } from "@/hooks/use-clear-shortcut";
+import { fadeInVariants, slideUpVariants, transitions, commonClasses, listStyles, terminalConfig } from "@/lib/ui-constants";
 
 interface BlogEntry {
   id: number;
@@ -26,6 +26,12 @@ export default function TerminalBlog({ onExit, scrollRef }: TerminalBlogProps) {
   const [input, setInput] = useState("");
   const [history, setHistory] = useState<string[]>([]);
 
+  // This component shares core features with the main terminal:
+  // - Same TerminalInput and TerminalCommand components
+  // - Own keyboard shortcuts (Ctrl+L, Ctrl+C) to avoid conflicts with main terminal
+  // - Consistent styling and animations
+  // - Same command history pattern
+  
   // Auto-scroll similar to main terminal using provided ref
   useEffect(() => {
     if (scrollRef?.current) {
@@ -35,25 +41,39 @@ export default function TerminalBlog({ onExit, scrollRef }: TerminalBlogProps) {
     }
   }, [history, scrollRef]);
 
-  // Handle Ctrl+C (exit)
+  // Handle keyboard shortcuts (Ctrl/Cmd+C for exit, Ctrl/Cmd+L for clear) with capture & stopPropagation
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
-      if (e.ctrlKey && e.key.toLowerCase() === "c") {
+      const isCmd = e.ctrlKey || e.metaKey;
+      const key = e.key.toLowerCase();
+
+      if (isCmd && key === "c") {
         e.preventDefault();
+        e.stopPropagation();
         onExit();
+        return;
+      }
+
+      if (isCmd && key === "l") {
+        e.preventDefault();
+        e.stopPropagation();
+        setHistory([]);
+        setInput("");
+        return;
       }
     };
-    window.addEventListener("keydown", handleKey);
-    return () => window.removeEventListener("keydown", handleKey);
+
+    // Use capture phase to intercept before other handlers
+    window.addEventListener("keydown", handleKey, { capture: true });
+    return () => window.removeEventListener("keydown", handleKey, { capture: true } as any);
   }, [onExit]);
 
   const clearHistory = () => setHistory([]);
 
-  useClearShortcut(clearHistory);
-
-  // Also respond to 'cls' or 'clear' typed directly
+  // Also respond to clear commands typed directly
   useEffect(() => {
-    if (input.trim().toLowerCase() === "cls" || input.trim().toLowerCase() === "clear") {
+    const cmd = input.trim().toLowerCase();
+    if (terminalConfig.clearCommands.includes(cmd)) {
       clearHistory();
       setInput("");
     }
@@ -68,7 +88,8 @@ export default function TerminalBlog({ onExit, scrollRef }: TerminalBlogProps) {
       onExit();
       return;
     }
-    if (cmd === "cls" || cmd === "clear") {
+    
+    if (terminalConfig.clearCommands.includes(cmd)) {
       clearHistory();
       return;
     }
@@ -77,44 +98,62 @@ export default function TerminalBlog({ onExit, scrollRef }: TerminalBlogProps) {
   };
 
   const renderOutput = (cmd: string) => {
-    switch (cmd) {
-      case "ls":
-        return (
-          <ul className="list-caret ml-4 space-y-1 mt-1">
-            {BLOGS.map((post) => (
-              <li key={post.id}>{post.title}</li>
-            ))}
-          </ul>
-        );
-      case "help":
-        return (
-          <ul className="list-caret ml-4 space-y-1 mt-1">
-            <li>ls - list available blogs</li>
-            <li>exit or Ctrl+C - leave blog mode</li>
-          </ul>
-        );
-      default:
-        return (
-          <div className="text-red-500 p-3 border border-red-500/20 rounded bg-red-500/5">
-            Command not found. Type &apos;help&apos; to see available commands.
-          </div>
-        );
-    }
+    const content = (() => {
+      switch (cmd) {
+        case "ls":
+          return (
+            <ul className={`${listStyles.caret} ml-4 space-y-1 mt-1`}>
+              {BLOGS.map((post) => (
+                <li key={post.id} className={commonClasses.interactive}>{post.title}</li>
+              ))}
+            </ul>
+          );
+        case "help":
+          return (
+            <ul className={`${listStyles.caret} ml-4 space-y-1 mt-1`}>
+              <li><span className={commonClasses.terminalPrompt}>ls</span> - list available blogs</li>
+              <li><span className={commonClasses.terminalPrompt}>exit</span> or <span className={commonClasses.tag}>Ctrl+C</span> - leave blog mode</li>
+              <li><span className={commonClasses.terminalPrompt}>{terminalConfig.clearCommands.join(' or ')}</span> or <span className={commonClasses.tag}>Ctrl+L</span> - clear terminal</li>
+            </ul>
+          );
+        default:
+          return (
+            <div className={commonClasses.error}>
+              Command not found. Type <span className={commonClasses.tag}>help</span> to see available commands.
+            </div>
+          );
+      }
+    })();
+
+    return (
+      <motion.div
+        variants={slideUpVariants}
+        initial="hidden"
+        animate="show"
+        transition={transitions.normal}
+        className="mb-8"
+      >
+        {content}
+      </motion.div>
+    );
   };
 
   return (
     <>
       {/* Header */}
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
+        variants={fadeInVariants}
+        initial="hidden"
+        animate="show"
+        transition={transitions.slow}
         className="mb-8 text-foreground"
       >
         <p className="text-lg">
-          welcome to <span className="text-accent font-bold">my blogs</span>
+          welcome to <span className={commonClasses.terminalPrompt}>my blogs</span>
         </p>
-        <p className="mb-2 text-foreground/90">type &apos;ls&apos; to see available posts or &apos;help&apos; for commands</p>
+        <p className={`mb-2 ${commonClasses.terminalText}`}>
+          type <span className={commonClasses.tag}>ls</span> to see available posts or <span className={commonClasses.tag}>help</span> for commands
+        </p>
       </motion.div>
 
       {/* History */}
