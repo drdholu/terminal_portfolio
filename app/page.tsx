@@ -111,7 +111,7 @@ import Terminal from "@/components/terminal/terminal";
 
 export default function Home() {
   return (
-      <main className="min-h-screen p-4 md:p-8 max-w-4xl mx-auto">
+      <main className="min-h-screen px-3 sm:px-4 md:px-6 py-4 md:py-8 w-full max-w-5xl mx-auto">
         <Terminal />
       </main>
   );

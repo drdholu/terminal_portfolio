@@ -5,7 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import CommandMenu from "@/components/command-menu";
 import MatrixBackground from "@/components/matrix-background";
 import ThemeSelector from "@/components/theme-selector";
-import MouseBlob from "@/components/mouse-blob";
+// import MouseBlob from "@/components/mouse-blob";
 
 const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"] });
 
@@ -21,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={jetbrainsMono.className}>
+      <body className={`${jetbrainsMono.className} antialiased`}> 
         <ThemeProvider
           attribute="data-theme"
           defaultTheme="matrix"
@@ -29,7 +29,7 @@ export default function RootLayout({
           themes={["matrix", "dracula", "monokai", "nord", "solarizedDark"]}
         >
           <MatrixBackground />
-          <MouseBlob />
+          {/* <MouseBlob /> */}
           <CommandMenu />
           <ThemeSelector />
           {children}

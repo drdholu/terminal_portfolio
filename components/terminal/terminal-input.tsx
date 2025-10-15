@@ -43,7 +43,7 @@ export default function TerminalInput({ value, onChange, onSubmit }: TerminalInp
   };
 
   return (
-    <div className={`${commonClasses.flexCenter} font-mono justify-start`}>
+    <div className={`${commonClasses.flexCenter} justify-start`}>
       <span className={`${commonClasses.terminalPrompt} mr-2`}>
         {terminalConfig.promptSymbol}
       </span>

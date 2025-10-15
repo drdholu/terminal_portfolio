@@ -26,7 +26,7 @@ export default function ThemeSelector() {
       </button>
 
       {open && (
-        <div className={`absolute bottom-full right-0 mb-2 ${commonClasses.card} shadow-lg min-w-[200px]`}>
+        <div className="absolute bottom-full right-0 mb-2 p-4 border border-border rounded-lg bg-background shadow-lg min-w-[200px] backdrop-blur-sm">
           {Object.entries(themes).map(([themeName, themeConfig]) => (
             <button
               key={themeName}

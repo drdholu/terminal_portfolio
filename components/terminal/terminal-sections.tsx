@@ -12,6 +12,7 @@ interface InfoType {
   "Positions of Responsibility": { details: { position: string; organization: string; duration: string; responsibilities: string[]; }[]; };
   Education: { details: { degree: string; institution: string; expected_graduation: string; cgpa: string; }[]; };
   Contact: { details: { location: string; linkedin: string; github: string; } };
+  Experience: { details: { role: string; company: string; duration: string; responsibilities?: string[]; technologies?: string[]; }[]; };
 }
 
 interface Section {
@@ -97,6 +98,35 @@ function renderContent(key: string, data: any): React.ReactNode {
           ))}
         </div>
       );
+    case "Experience":
+      return (
+        <div className="space-y-6">
+          {data.details.map((exp: any) => (
+            <div key={`${exp.role}-${exp.company}-${exp.duration}`} className={`${commonClasses.card} ${commonClasses.cardHover} project-card`}>
+              <h3 className={`text-lg font-bold ${commonClasses.terminalPrompt}`}>{exp.role}</h3>
+              <p className={commonClasses.terminalMuted}>
+                <span className="font-medium">{exp.company}</span> | <span className={commonClasses.terminalPrompt}>{exp.duration}</span>
+              </p>
+              {Array.isArray(exp.responsibilities) && exp.responsibilities.length > 0 && (
+                <ul className={`${listStyles.arrow} ml-4 mt-2 space-y-1`}>
+                  {exp.responsibilities.map((resp: string) => (
+                    <li key={resp} className={commonClasses.terminalText}>{resp}</li>
+                  ))}
+                </ul>
+              )}
+              {Array.isArray(exp.technologies) && exp.technologies.length > 0 && (
+                <div className="mt-3">
+                  {exp.technologies.map((tech: string) => (
+                    <span key={tech} className={commonClasses.tag}>
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      );
     case "Positions of Responsibility":
       return (
         <div className="space-y-6">
@@ -168,7 +198,8 @@ interface TerminalSectionsProps {
 }
 
 export default function TerminalSections({ command }: TerminalSectionsProps) {
-  const section = sections[command.toLowerCase()];
+  // Lookup uses normalized command, display uses raw command elsewhere
+  const section = sections[command.trim().toLowerCase()];
   
   if (!section) {
     return (

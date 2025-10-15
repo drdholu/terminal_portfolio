@@ -16,8 +16,8 @@ export default function TerminalCommand({ command }: TerminalCommandProps) {
       transition={transitions.fast}
       className="command-history"
     >
-      <p className={`terminal-prompt ${commonClasses.terminalText}`}>
-        <span className={commonClasses.terminalPrompt}>{terminalConfig.promptSymbol}</span>
+      <p className={`terminal-prompt  text-accent`}>
+        <span className={`${commonClasses.terminalPrompt} mr-2`}>{terminalConfig.promptSymbol}</span>
         {command}
       </p>
     </motion.div>

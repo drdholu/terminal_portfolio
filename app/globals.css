@@ -6,13 +6,30 @@
   /* Theme definitions with selection colors */
   :root[data-theme="matrix"] {
     --background: 0 0% 0%;
-    --foreground: 120 100% 50%;
+    --foreground: 120 70% 60%;
+    --card: 0 0% 0%;
+    --card-foreground: 120 70% 60%;
+    --popover: 0 0% 0%;
+    --popover-foreground: 120 70% 60%;
+    --primary: 120 85% 45%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 120 100% 13%;
+    --secondary-foreground: 120 70% 60%;
     --muted: 120 100% 13%;
-    --muted-foreground: 120 100% 40%;
-    --accent: 120 100% 40%;
+    --muted-foreground: 120 60% 46%;
+    --accent: 120 85% 46%;
     --accent-foreground: 0 0% 100%;
-    --border: 120 100% 20%;
-    --window-control: 120 100% 40%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 120 30% 28%;
+    --input: 120 30% 28%;
+    --ring: 120 85% 46%;
+    --chart-1: 120 85% 46%;
+    --chart-2: 120 70% 40%;
+    --chart-3: 120 70% 52%;
+    --chart-4: 120 65% 38%;
+    --chart-5: 120 70% 48%;
+    --window-control: 120 85% 46%;
   }
 
   :root[data-theme="matrix"] *::selection {
@@ -23,11 +40,28 @@
   :root[data-theme="dracula"] {
     --background: 231 15% 18%;
     --foreground: 60 30% 96%;
+    --card: 231 15% 18%;
+    --card-foreground: 60 30% 96%;
+    --popover: 231 15% 18%;
+    --popover-foreground: 60 30% 96%;
+    --primary: 265 89% 78%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 232 14% 31%;
+    --secondary-foreground: 60 30% 96%;
     --muted: 232 14% 31%;
     --muted-foreground: 60 30% 96%;
     --accent: 265 89% 78%;
     --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
     --border: 231 15% 18%;
+    --input: 232 14% 31%;
+    --ring: 265 89% 78%;
+    --chart-1: 265 89% 78%;
+    --chart-2: 326 100% 74%;
+    --chart-3: 135 94% 65%;
+    --chart-4: 62 100% 68%;
+    --chart-5: 31 100% 71%;
     --window-control: 265 89% 78%;
   }
 
@@ -39,11 +73,28 @@
   :root[data-theme="monokai"] {
     --background: 70 8% 15%;
     --foreground: 60 30% 96%;
+    --card: 70 8% 15%;
+    --card-foreground: 60 30% 96%;
+    --popover: 70 8% 15%;
+    --popover-foreground: 60 30% 96%;
+    --primary: 54 70% 68%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 55 11% 29%;
+    --secondary-foreground: 60 30% 96%;
     --muted: 55 11% 29%;
     --muted-foreground: 60 30% 96%;
     --accent: 54 70% 68%;
     --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
     --border: 55 11% 29%;
+    --input: 55 11% 29%;
+    --ring: 54 70% 68%;
+    --chart-1: 54 70% 68%;
+    --chart-2: 326 100% 74%;
+    --chart-3: 135 94% 65%;
+    --chart-4: 31 100% 71%;
+    --chart-5: 197 71% 73%;
     --window-control: 54 70% 68%;
   }
 
@@ -55,11 +106,28 @@
   :root[data-theme="nord"] {
     --background: 220 16% 22%;
     --foreground: 218 27% 94%;
+    --card: 220 16% 22%;
+    --card-foreground: 218 27% 94%;
+    --popover: 220 16% 22%;
+    --popover-foreground: 218 27% 94%;
+    --primary: 199 34% 67%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 16% 28%;
+    --secondary-foreground: 218 27% 94%;
     --muted: 220 16% 28%;
     --muted-foreground: 218 27% 94%;
     --accent: 199 34% 67%;
     --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
     --border: 220 16% 28%;
+    --input: 220 16% 28%;
+    --ring: 199 34% 67%;
+    --chart-1: 199 34% 67%;
+    --chart-2: 213 32% 52%;
+    --chart-3: 179 25% 65%;
+    --chart-4: 92 28% 65%;
+    --chart-5: 311 20% 68%;
     --window-control: 199 34% 67%;
   }
 
@@ -71,11 +139,28 @@
   :root[data-theme="solarizedDark"] {
     --background: 193 100% 11%;
     --foreground: 194 14% 55%;
+    --card: 193 100% 11%;
+    --card-foreground: 194 14% 55%;
+    --popover: 193 100% 11%;
+    --popover-foreground: 194 14% 55%;
+    --primary: 45 100% 35%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 193 100% 14%;
+    --secondary-foreground: 194 14% 55%;
     --muted: 193 100% 14%;
     --muted-foreground: 194 14% 55%;
     --accent: 45 100% 35%;
     --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
     --border: 194 14% 55%;
+    --input: 193 100% 14%;
+    --ring: 45 100% 35%;
+    --chart-1: 45 100% 35%;
+    --chart-2: 18 89% 45%;
+    --chart-3: 1 79% 55%;
+    --chart-4: 205 98% 39%;
+    --chart-5: 237 45% 64%;
     --window-control: 45 100% 35%;
   }
 
@@ -134,16 +219,17 @@
 /* Enhanced Terminal UI Styles */
 .terminal-window {
   @apply bg-background/80 text-foreground rounded-lg shadow-xl backdrop-blur-sm border border-border;
-  font-family: 'JetBrains Mono', monospace;
+  /* font-family: 'JetBrains Mono', monospace; */
   transition: box-shadow 0.3s ease, transform 0.2s ease;
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 
               0 10px 10px -5px rgba(0, 0, 0, 0.2),
               0 0 0 1px hsl(var(--border) / 0.3);
   display: flex;
   flex-direction: column;
-  height: 36em;
-  max-height: 80vh;
   width: 100%;
+  /* Responsive sizing: allow content to grow on mobile, constrain on larger screens */
+  min-height: 60vh;
+  max-height: 80vh;
   overflow: hidden; /* Prevent terminal window from scrolling */
 }
 
@@ -180,21 +266,22 @@
 }
 
 .window-content {
-  @apply p-6;
+  @apply p-4 sm:p-5 md:p-6;
   scroll-behavior: smooth;
   overflow-y: auto;
   overflow-x: hidden;
   flex-grow: 1;
-  height: 100%;
 }
 
 .terminal-input-container {
   position: sticky;
   bottom: 0;
-  background-color: hsl(var(--background));
+  background-color: hsl(var(--background) / 0.9);
   padding-top: 0.5rem;
+  padding-bottom: 0.25rem;
   z-index: 10;
   margin-top: 1rem;
+  backdrop-filter: blur(6px);
 }
 
 .window-content::-webkit-scrollbar {

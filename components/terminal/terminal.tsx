@@ -49,15 +49,16 @@ export default function Terminal() {
 
   const handleCommand = (command: string) => {
     if (!command.trim()) return;
-    const cmd = command.trim().toLowerCase();
+    const normalized = command.trim().toLowerCase();
 
-    if (cmd === "blg") {
+    if (normalized === "blg") {
       setBlogMode(true);
       setInput("");
       return;
     }
 
-    setHistory((prev) => [...prev, cmd]);
+    // Preserve the user's original input for display (including leading space)
+    setHistory((prev) => [...prev, command]);
   };
 
   return (

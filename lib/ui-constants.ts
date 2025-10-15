@@ -50,17 +50,17 @@ export const spacing = {
 // Common class combinations for consistency
 export const commonClasses = {
   // Card-like containers
-  card: "p-4 border border-border rounded-lg bg-background/50 backdrop-blur-sm",
+  card: "p-4 sm:p-5 md:p-6 border border-border rounded-lg bg-background/50 backdrop-blur-sm",
   cardHover: "transition-all duration-200 hover:border-accent/30 hover:bg-accent/5",
   
   // Terminal-style text elements
   terminalPrompt: "text-accent font-bold",
-  terminalText: "text-foreground/90",
-  terminalMuted: "text-foreground/70",
+  terminalText: "text-accent leading-relaxed",
+  terminalMuted: "text-foreground/70 leading-relaxed",
   
   // Interactive elements
-  interactive: "transition-colors duration-200 hover:text-accent",
-  button: "px-3 py-1.5 rounded border border-border bg-background hover:bg-muted transition-colors",
+  interactive: "transition-colors duration-200 hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 rounded-sm",
+  button: "px-3 py-1.5 rounded border border-border bg-background hover:bg-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40",
   
   // Layout helpers
   flexCenter: "flex items-center justify-center",
