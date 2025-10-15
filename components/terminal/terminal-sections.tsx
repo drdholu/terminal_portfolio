@@ -10,8 +10,8 @@ interface InfoType {
   Skills: { details: { name: string; technologies: string[]; }[]; };
   Projects: { details: { name: string; status: string; link: string; description: string; technologies: string[]; }[]; };
   "Positions of Responsibility": { details: { position: string; organization: string; duration: string; responsibilities: string[]; }[]; };
-  Education: { details: { degree: string; institution: string; expected_graduation: string; cgpa: string; }[]; };
-  Contact: { details: { location: string; linkedin: string; github: string; } };
+  Education: { details: { degree: string; institution: string; expected_graduation: string; cgpa?: string; }[]; };
+  Contact: { details: { location?: string; linkedin?: string; github?: string; } };
   Experience: { details: { role: string; company: string; duration: string; responsibilities?: string[]; technologies?: string[]; }[]; };
 }
 
@@ -154,7 +154,9 @@ function renderContent(key: string, data: any): React.ReactNode {
               <p className={`${commonClasses.terminalText} font-medium`}>{edu.institution}</p>
               <div className="mt-2 grid grid-cols-2 gap-2">
                 <p><span className={commonClasses.terminalMuted}>Expected Graduation:</span> {edu.expected_graduation}</p>
-                <p><span className={commonClasses.terminalMuted}>CGPA:</span> {edu.cgpa}</p>
+                {edu.cgpa && (
+                  <p><span className={commonClasses.terminalMuted}>CGPA:</span> {edu.cgpa}</p>
+                )}
               </div>
             </div>
           ))}
@@ -163,29 +165,35 @@ function renderContent(key: string, data: any): React.ReactNode {
     case "Contact":
       return (
         <div className={`space-y-3 ${commonClasses.card} ${commonClasses.cardHover} project-card`}>
-          <p className={commonClasses.flexCenter}>
-            <span className={commonClasses.terminalMuted}>📍 Location:</span> {data.details.location}
-          </p>
-          <p className={commonClasses.flexCenter}>
-            <span className={commonClasses.terminalMuted}>🔗 LinkedIn:</span> 
-            <a
-              target="_blank"
-              href={`https://${data.details.linkedin}`}
-              className={commonClasses.interactive}
-            >
-              {data.details.linkedin}
-            </a>
-          </p>
-          <p className={commonClasses.flexCenter}>
-            <span className={commonClasses.terminalMuted}>💻 GitHub:</span>
-            <a
-              target="_blank"
-              href={`https://${data.details.github}`}
-              className={commonClasses.interactive}
-            >
-              {data.details.github}
-            </a>
-          </p>
+          {data.details.location && (
+            <p className={commonClasses.flexCenter}>
+              <span className={commonClasses.terminalMuted}>📍 Location:</span> {data.details.location}
+            </p>
+          )}
+          {data.details.linkedin && (
+            <p className={commonClasses.flexCenter}>
+              <span className={commonClasses.terminalMuted}>🔗 LinkedIn:</span> 
+              <a
+                target="_blank"
+                href={`https://${data.details.linkedin}`}
+                className={commonClasses.interactive}
+              >
+                {data.details.linkedin}
+              </a>
+            </p>
+          )}
+          {data.details.github && (
+            <p className={commonClasses.flexCenter}>
+              <span className={commonClasses.terminalMuted}>💻 GitHub:</span>
+              <a
+                target="_blank"
+                href={`https://${data.details.github}`}
+                className={commonClasses.interactive}
+              >
+                {data.details.github}
+              </a>
+            </p>
+          )}
         </div>
       );
     default:
