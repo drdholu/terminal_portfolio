@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { motion } from "framer-motion";
+import { motion, useDragControls, useMotionValue } from "framer-motion";
+import { RotateCcw } from "lucide-react";
 import TerminalIntro from "./terminal-intro";
 import TerminalInput from "./terminal-input";
 import TerminalCommand from "./terminal-command";
@@ -15,10 +16,20 @@ interface HistoryItem {
 }
 
 export default function Terminal() {
+  const INITIAL_X = 0;
+  const INITIAL_Y = 0;
+  const CONSTRAINT_MARGIN = 12; // keep a bit inside the viewport
   const [input, setInput] = useState("");
   const [history, setHistory] = useState<string[]>([]);
   const terminalContentRef = useRef<HTMLDivElement>(null);
   const [blogMode, setBlogMode] = useState(false);
+  // Drag-related refs and values
+  const containerRef = useRef<HTMLDivElement>(null);
+  const dragControls = useDragControls();
+  const x = useMotionValue(INITIAL_X);
+  const y = useMotionValue(INITIAL_Y);
+  const [dragBounds, setDragBounds] = useState<{ top: number; right: number; bottom: number; left: number }>({ top: 0, right: 0, bottom: 0, left: 0 });
+  const [isDragging, setIsDragging] = useState(false);
 
   // Auto scroll effect when history changes
   useEffect(() => {
@@ -37,6 +48,31 @@ export default function Terminal() {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  useEffect(() => {
+    const updateBounds = () => {
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      setDragBounds({
+        left: -(rect.left - CONSTRAINT_MARGIN),
+        top: -(rect.top - CONSTRAINT_MARGIN),
+        right: vw - rect.right - CONSTRAINT_MARGIN,
+        bottom: vh - rect.bottom - CONSTRAINT_MARGIN,
+      });
+    };
+    updateBounds();
+    const ro = new ResizeObserver(updateBounds);
+    if (containerRef.current) ro.observe(containerRef.current);
+    window.addEventListener('resize', updateBounds);
+    window.addEventListener('orientationchange', updateBounds);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', updateBounds);
+      window.removeEventListener('orientationchange', updateBounds);
+    };
   }, []);
 
   useEffect(() => {
@@ -63,19 +99,62 @@ export default function Terminal() {
 
   return (
     <motion.div 
-      variants={slideUpVariants}
-      initial="hidden"
-      animate="show"
+      ref={containerRef}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
       transition={transitions.slow}
-      className="terminal-window"
+      className={`terminal-window${isDragging ? " select-none" : ""}`}
+      drag
+      dragControls={dragControls}
+      dragListener={false}
+      dragConstraints={dragBounds}
+      dragMomentum={false}
+      style={{ x, y }}
+      onDragStart={() => setIsDragging(true)}
+      onDragEnd={() => setIsDragging(false)}
     >
-      <div className="window-header">
+      <div 
+        className={`window-header ${isDragging ? "cursor-grabbing" : "cursor-grab"} select-none`}
+        onPointerDown={(e) => {
+          // Gate dragging to fine pointers (desktop), ignore touch
+          const isFinePointer = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(pointer: fine)').matches;
+          if (!isFinePointer || (e as any).pointerType === 'touch') return;
+          e.preventDefault();
+          // Recalculate bounds at the moment of drag start so current position/size are accounted for
+          if (containerRef.current) {
+            const rect = containerRef.current.getBoundingClientRect();
+            const vw = window.innerWidth;
+            const vh = window.innerHeight;
+            setDragBounds({
+              left: -(rect.left - CONSTRAINT_MARGIN),
+              top: -(rect.top - CONSTRAINT_MARGIN),
+              right: vw - rect.right - CONSTRAINT_MARGIN,
+              bottom: vh - rect.bottom - CONSTRAINT_MARGIN,
+            });
+          }
+          dragControls.start(e);
+        }}
+      >
         <div className="window-controls">
           <div className="window-button window-button-close" />
           <div className="window-button window-button-minimize" />
           <div className="window-button window-button-maximize" />
         </div>
         <div className="window-title">{terminalConfig.windowTitle}</div>
+        <div className="ml-auto flex items-center pl-2">
+          <button
+            type="button"
+            aria-label="Reset position"
+            className="inline-flex items-center justify-center rounded px-2 py-1 text-foreground/70 hover:text-foreground transition-colors"
+            onPointerDown={(e) => e.stopPropagation()}
+            onClick={() => {
+              x.set(INITIAL_X);
+              y.set(INITIAL_Y);
+            }}
+          >
+            <RotateCcw className="h-4 w-4" />
+          </button>
+        </div>
       </div>
       
       <motion.div 
