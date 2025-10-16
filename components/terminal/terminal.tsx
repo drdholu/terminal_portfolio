@@ -18,7 +18,7 @@ interface HistoryItem {
 export default function Terminal() {
   const INITIAL_X = 0;
   const INITIAL_Y = 0;
-  const CONSTRAINT_MARGIN = 12; // keep a bit inside the viewport
+  const CONSTRAINT_MARGIN = 20; // keep a bit inside the viewport
   const [input, setInput] = useState("");
   const [history, setHistory] = useState<string[]>([]);
   const terminalContentRef = useRef<HTMLDivElement>(null);
@@ -30,6 +30,7 @@ export default function Terminal() {
   const y = useMotionValue(INITIAL_Y);
   const [dragBounds, setDragBounds] = useState<{ top: number; right: number; bottom: number; left: number }>({ top: 0, right: 0, bottom: 0, left: 0 });
   const [isDragging, setIsDragging] = useState(false);
+  const [hasMoved, setHasMoved] = useState(false);
 
   // Auto scroll effect when history changes
   useEffect(() => {
@@ -111,7 +112,11 @@ export default function Terminal() {
       dragMomentum={false}
       style={{ x, y }}
       onDragStart={() => setIsDragging(true)}
-      onDragEnd={() => setIsDragging(false)}
+      onDragEnd={() => {
+        setIsDragging(false);
+        const moved = Math.abs(x.get() - INITIAL_X) > 0.5 || Math.abs(y.get() - INITIAL_Y) > 0.5;
+        setHasMoved(moved);
+      }}
     >
       <div 
         className={`window-header ${isDragging ? "cursor-grabbing" : "cursor-grab"} select-none`}
@@ -141,20 +146,23 @@ export default function Terminal() {
           <div className="window-button window-button-maximize" />
         </div>
         <div className="window-title">{terminalConfig.windowTitle}</div>
-        <div className="ml-auto flex items-center pl-2">
-          <button
-            type="button"
-            aria-label="Reset position"
-            className="inline-flex items-center justify-center rounded px-2 py-1 text-foreground/70 hover:text-foreground transition-colors"
-            onPointerDown={(e) => e.stopPropagation()}
-            onClick={() => {
-              x.set(INITIAL_X);
-              y.set(INITIAL_Y);
-            }}
-          >
-            <RotateCcw className="h-4 w-4" />
-          </button>
-        </div>
+        {(isDragging || hasMoved) && (
+          <div className="ml-auto flex items-center pl-2">
+            <button
+              type="button"
+              aria-label="Reset position"
+              className="inline-flex items-center justify-center rounded px-2 py-1 text-foreground/70 hover:text-foreground transition-colors"
+              onPointerDown={(e) => e.stopPropagation()}
+              onClick={() => {
+                x.set(INITIAL_X);
+                y.set(INITIAL_Y);
+                setHasMoved(false);
+              }}
+            >
+              <RotateCcw className="h-4 w-4" />
+            </button>
+          </div>
+        )}
       </div>
       
       <motion.div 
