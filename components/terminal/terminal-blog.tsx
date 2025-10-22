@@ -4,18 +4,22 @@ import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import TerminalInput from "./terminal-input";
 import TerminalCommand from "./terminal-command";
-import { fadeInVariants, slideUpVariants, transitions, commonClasses, listStyles, terminalConfig } from "@/lib/ui-constants";
+import {
+  fadeInVariants,
+  slideUpVariants,
+  transitions,
+  commonClasses,
+  listStyles,
+  terminalConfig,
+} from "@/lib/ui-constants";
+import MarkdownComponent from "../markdown";
 
 interface BlogEntry {
   id: number;
   title: string;
 }
 
-const BLOGS: BlogEntry[] = [
-  { id: 1, title: "building my portfolio with next.js" },
-  { id: 2, title: "why i love typescript" },
-  { id: 3, title: "learning systems programming in rust" },
-];
+const BLOGS: BlogEntry[] = [{ id: 1, title: "working on this!" }];
 
 interface TerminalBlogProps {
   onExit: () => void;
@@ -31,7 +35,7 @@ export default function TerminalBlog({ onExit, scrollRef }: TerminalBlogProps) {
   // - Own keyboard shortcuts (Ctrl+L, Ctrl+C) to avoid conflicts with main terminal
   // - Consistent styling and animations
   // - Same command history pattern
-  
+
   // Auto-scroll similar to main terminal using provided ref
   useEffect(() => {
     if (scrollRef?.current) {
@@ -65,7 +69,10 @@ export default function TerminalBlog({ onExit, scrollRef }: TerminalBlogProps) {
 
     // Use capture phase to intercept before other handlers
     window.addEventListener("keydown", handleKey, { capture: true });
-    return () => window.removeEventListener("keydown", handleKey, { capture: true } as any);
+    return () =>
+      window.removeEventListener("keydown", handleKey, {
+        capture: true,
+      } as any);
   }, [onExit]);
 
   const clearHistory = () => setHistory([]);
@@ -88,7 +95,7 @@ export default function TerminalBlog({ onExit, scrollRef }: TerminalBlogProps) {
       onExit();
       return;
     }
-    
+
     if (terminalConfig.clearCommands.includes(cmd)) {
       clearHistory();
       return;
@@ -101,25 +108,34 @@ export default function TerminalBlog({ onExit, scrollRef }: TerminalBlogProps) {
     const content = (() => {
       switch (cmd) {
         case "ls":
-          return (
-            <ul className={`${listStyles.caret} ml-4 space-y-1 mt-1`}>
-              {BLOGS.map((post) => (
-                <li key={post.id} className={commonClasses.interactive}>{post.title}</li>
-              ))}
-            </ul>
-          );
+          return <MarkdownComponent />;
         case "help":
           return (
             <ul className={`${listStyles.caret} ml-4 space-y-1 mt-1`}>
-              <li><span className={commonClasses.terminalPrompt}>ls</span> - list available blogs</li>
-              <li><span className={commonClasses.terminalPrompt}>exit</span> or <span className={commonClasses.tag}>Ctrl+C</span> - leave blog mode</li>
-              <li><span className={commonClasses.terminalPrompt}>{terminalConfig.clearCommands.join(' or ')}</span> or <span className={commonClasses.tag}>Ctrl+L</span> - clear terminal</li>
+              <li>
+                <span className={commonClasses.terminalPrompt}>ls</span> - list
+                available blogs
+              </li>
+              <li>
+                <span className={commonClasses.terminalPrompt}>exit</span> or{" "}
+                <span className={commonClasses.tag}>Ctrl+C</span> - leave blog
+                mode
+              </li>
+              <li>
+                <span className={commonClasses.terminalPrompt}>
+                  {terminalConfig.clearCommands.join(" or ")}
+                </span>{" "}
+                or <span className={commonClasses.tag}>Ctrl+L</span> - clear
+                terminal
+              </li>
             </ul>
           );
         default:
           return (
             <div className={commonClasses.error}>
-              Command not found. Type <span className={commonClasses.tag}>help</span> to see available commands.
+              Command not found. Type{" "}
+              <span className={commonClasses.tag}>help</span> to see available
+              commands.
             </div>
           );
       }
@@ -149,10 +165,12 @@ export default function TerminalBlog({ onExit, scrollRef }: TerminalBlogProps) {
         className="mb-8 text-foreground"
       >
         <p className="text-lg">
-          welcome to <span className={commonClasses.terminalPrompt}>my blogs</span>
+          welcome to{" "}
+          <span className={commonClasses.terminalPrompt}>my blogs</span>
         </p>
         <p className={`mb-2 ${commonClasses.terminalText}`}>
-          type <span className={commonClasses.tag}>ls</span> to see available posts or <span className={commonClasses.tag}>help</span> for commands
+          type <span className={commonClasses.tag}>ls</span> to see available
+          posts or <span className={commonClasses.tag}>help</span> for commands
         </p>
       </motion.div>
 
@@ -167,7 +185,11 @@ export default function TerminalBlog({ onExit, scrollRef }: TerminalBlogProps) {
       </div>
 
       {/* Input */}
-      <TerminalInput value={input} onChange={setInput} onSubmit={handleCommand} />
+      <TerminalInput
+        value={input}
+        onChange={setInput}
+        onSubmit={handleCommand}
+      />
     </>
   );
 }

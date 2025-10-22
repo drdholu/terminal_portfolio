@@ -21,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${jetbrainsMono.className} antialiased`}> 
+      <body className={`${jetbrainsMono.className} antialiased`}>
         <ThemeProvider
           attribute="data-theme"
           defaultTheme="matrix"

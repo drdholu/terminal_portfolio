@@ -35,7 +35,7 @@
 //           </div>
 //           <div className="window-title">terminal@portfolio ~ -zsh</div>
 //         </div>
-        
+
 //         <div className="window-content">
 //           <motion.div variants={item} className="mb-8 text-center text-accent/50 text-sm">
 //             <p>Press <kbd className="px-2 py-1 bg-accent/10 rounded">Ctrl/⌘</kbd> + <kbd className="px-2 py-1 bg-accent/10 rounded">K</kbd> to open command palette</p>
@@ -107,12 +107,13 @@
 
 "use client";
 
+import MarkdownComponent from "@/components/markdown";
 import Terminal from "@/components/terminal/terminal";
 
 export default function Home() {
   return (
-      <main className="min-h-screen px-3 sm:px-4 md:px-6 py-4 md:py-8 w-full max-w-5xl mx-auto">
-        <Terminal />
-      </main>
+    <main className="min-h-screen px-3 sm:px-4 md:px-6 py-4 md:py-8 w-full max-w-5xl mx-auto">
+      <Terminal />
+    </main>
   );
 }
