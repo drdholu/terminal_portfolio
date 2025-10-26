@@ -205,33 +205,4 @@ interface TerminalSectionsProps {
   command: string;
 }
 
-export default function TerminalSections({ command }: TerminalSectionsProps) {
-  // Lookup uses normalized command, display uses raw command elsewhere
-  const section = sections[command.trim().toLowerCase()];
-  
-  if (!section) {
-    return (
-      <motion.div
-        variants={slideUpVariants}
-        initial="hidden"
-        animate="show"
-        transition={transitions.normal}
-        className={`mb-4 ${commonClasses.error}`}
-      >
-        Command not found. Type <span className={commonClasses.tag}>help</span> or <span className={commonClasses.tag}>ls</span> to see available commands.
-      </motion.div>
-    );
-  }
 
-  return (
-    <motion.section
-      variants={slideUpVariants}
-      initial="hidden"
-      animate="show"
-      transition={transitions.normal}
-      className="mb-8"
-    >
-      {section.content}
-    </motion.section>
-  );
-}
