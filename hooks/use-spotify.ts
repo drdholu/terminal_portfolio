@@ -1,12 +1,13 @@
 import useSWR from "swr";
 
 export interface SpotifySong {
-  name: string;
-  artist: string;
-  album: string;
-  url: string;
-  image: string;
-  played_at: string;
+  isPlaying: boolean;
+  name?: string;
+  artist?: string;
+  album?: string;
+  url?: string;
+  image?: string;
+  played_at?: string;
 }
 
 const fetcher = (url: string) =>

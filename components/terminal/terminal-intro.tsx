@@ -50,7 +50,7 @@ export default function TerminalIntro() {
           </div>
         )}
         
-        {song && (
+        {song?.isPlaying && (
           <div className={`group ${commonClasses.card} ${commonClasses.cardHover} bg-accent/5 border-accent/20`}>
             <p className={`${commonClasses.terminalMuted} text-xs mb-2`}>currently listening to</p>
             <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-3">
@@ -65,6 +65,21 @@ export default function TerminalIntro() {
               <div className="text-accent/90 overflow-hidden flex-1 min-w-0">
                 <p className="truncate font-medium text-sm sm:text-base">{song.name}</p>
                 <p className={`text-xs sm:text-sm truncate ${commonClasses.terminalMuted}`}>by {song.artist}</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {song && song.isPlaying === false && (
+          <div className={`group ${commonClasses.card} ${commonClasses.cardHover} bg-accent/5 border-accent/20`}>
+            <p className={`${commonClasses.terminalMuted} text-xs mb-2`}>
+              currently listening to <span className="font-medium text-accent/90">nothing</span>
+            </p>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-3">
+              <div className="w-16 h-16 sm:w-12 sm:h-12 rounded-md border border-accent/20 bg-transparent flex-shrink-0"></div>
+              <div className="text-accent/90 overflow-hidden flex-1 min-w-0">
+                <p className="truncate font-medium text-sm sm:text-base">N/A</p>
+                <p className={`text-xs sm:text-sm truncate ${commonClasses.terminalMuted}`}>by N/A</p>
               </div>
             </div>
           </div>

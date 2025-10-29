@@ -1,4 +1,7 @@
 import { NextResponse } from "next/server";
+import { getNowPlaying } from "@/lib/spotify";
+
+export const revalidate = 120;
 
 export async function GET() {
   const {
@@ -15,68 +18,36 @@ export async function GET() {
   }
 
   try {
-    const basic = Buffer.from(
-      `${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`
-    ).toString("base64");
+    const nowRes = await getNowPlaying();
 
-    // Refresh access token using the refresh token
-    const tokenRes = await fetch("https://accounts.spotify.com/api/token", {
-      method: "POST",
-      headers: {
-        Authorization: `Basic ${basic}`,
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: new URLSearchParams({
-        grant_type: "refresh_token",
-        refresh_token: SPOTIFY_REFRESH_TOKEN,
-      }),
-      // Access tokens are short-lived so we never want to cache this request
-      cache: "no-store",
-    });
+    // 204 means nothing is playing
+    if (nowRes.status === 204) {
+      return NextResponse.json({ isPlaying: false });
+    }
 
-    if (!tokenRes.ok) {
+    if (!nowRes.ok) {
       return NextResponse.json(
-        { error: "Failed to refresh Spotify token." },
-        { status: tokenRes.status }
+        { error: "Failed to fetch currently playing track." },
+        { status: nowRes.status }
       );
     }
 
-    const { access_token } = await tokenRes.json();
+    const song = await nowRes.json();
+    const item = song?.item;
+    const isPlaying = Boolean(song?.is_playing);
 
-    // Fetch the most recently played track
-    const recentlyRes = await fetch(
-      "https://api.spotify.com/v1/me/player/recently-played?limit=1",
-      {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-        },
-        cache: "no-store",
-      }
-    );
-
-    if (!recentlyRes.ok) {
-      return NextResponse.json(
-        { error: "Failed to fetch recently played track." },
-        { status: recentlyRes.status }
-      );
+    if (!isPlaying || !item) {
+      return NextResponse.json({ isPlaying: false });
     }
 
-    const data = await recentlyRes.json();
-    const item = data.items?.[0];
-    const track = item?.track;
-
-    if (!track) {
-      return NextResponse.json({ error: "No track found." }, { status: 404 });
-    }
-
-    // Shape the data we expose to the client
+    // Shape the data we expose to the client when playing (matching current UI)
     return NextResponse.json({
-      name: track.name,
-      artist: track.artists?.[0]?.name,
-      album: track.album?.name,
-      url: track.external_urls?.spotify,
-      image: track.album?.images?.[0]?.url,
-      played_at: item.played_at,
+      isPlaying: true,
+      name: item.name,
+      artist: item.artists?.map((a: { name: string }) => a.name).join(", "),
+      album: item.album?.name,
+      url: item.external_urls?.spotify,
+      image: item.album?.images?.[0]?.url,
     });
   } catch {
     return NextResponse.json(
