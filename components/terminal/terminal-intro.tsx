@@ -24,8 +24,9 @@ export default function TerminalIntro() {
         <p className="text-lg">
           hi i&apos;m <span className={commonClasses.terminalPrompt}>paras</span>
         </p>
-        <p className={`mb-2 ${commonClasses.terminalText}`}>pursuing cse in coep</p>
-        <p className="mb-2">
+        <p className="mb-2 text-base">pursuing <span className={commonClasses.terminalPrompt}>cse</span> in coep. im a <span className={commonClasses.terminalPrompt}>full stack dev</span> and currently exploring <span className={commonClasses.terminalPrompt}>backend/system design</span> techniques.</p>
+        <p></p>
+        <p className="mb-2 mt-5 text-sm">
           type{" "}
           <span className={commonClasses.tag}>help</span>{" "}
           or{" "}
@@ -55,12 +56,14 @@ export default function TerminalIntro() {
             <p className={`${commonClasses.terminalMuted} text-xs mb-2`}>currently listening to</p>
             <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-3">
               {song.image && (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img 
-                  src={song.image} 
-                  alt={song.name} 
-                  className="w-16 h-16 sm:w-12 sm:h-12 rounded-md shadow-sm group-hover:shadow-md transition-shadow duration-200 flex-shrink-0" 
-                />
+                <div className="dither">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img 
+                    src={song.image} 
+                    alt={song.name} 
+                    className="w-16 h-16 sm:w-12 sm:h-12 rounded-md shadow-sm group-hover:shadow-md transition-shadow duration-200 flex-shrink-0" 
+                  />
+                </div>
               )}
               <div className="text-accent/90 overflow-hidden flex-1 min-w-0">
                 <p className="truncate font-medium text-sm sm:text-base">{song.name}</p>

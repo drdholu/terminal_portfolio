@@ -78,7 +78,7 @@ function renderContent(key: string, data: any): React.ReactNode {
       );
     case "Projects":
       return (
-        <div>
+        <div className="space-y-6">
           {data.details.map((project: any) => (
             <div key={project.name} className={`${commonClasses.card} ${commonClasses.cardHover} project-card`}>
               <Link href={project.link} target="_blank" className={`text-lg font-bold group ${commonClasses.interactive}`}>
@@ -117,7 +117,7 @@ function renderContent(key: string, data: any): React.ReactNode {
               {Array.isArray(exp.technologies) && exp.technologies.length > 0 && (
                 <div className="mt-3">
                   {exp.technologies.map((tech: string) => (
-                    <span key={tech} className={commonClasses.tag}>
+                    <span key={tech} className={`ml-1.5 ${commonClasses.tag}`}>
                       {tech}
                     </span>
                   ))}

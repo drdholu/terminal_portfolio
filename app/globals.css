@@ -1,12 +1,18 @@
+@import "dither-plugin";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    font-size: 115%;
+}
+
 @layer base {
-  /* Theme definitions with selection colors */
+  /* Theme definitions with selection colors */  
   :root[data-theme="matrix"] {
     --background: 0 0% 0%;
     --foreground: 120 70% 60%;
+    @import "dither-plugin";
     --card: 0 0% 0%;
     --card-foreground: 120 70% 60%;
     --popover: 0 0% 0%;
