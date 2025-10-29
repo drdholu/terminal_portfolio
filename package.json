@@ -41,7 +41,7 @@
     "cmdk": "^1.0.0",
     "embla-carousel": "^8.5.1",
     "embla-carousel-react": "^8.5.1",
-    "framer-motion": "^11.0.8",
+    "framer-motion": "^11.18.2",
     "gsap": "^3.12.5",
     "input-otp": "^1.4.1",
     "lucide-react": "^0.344.0",

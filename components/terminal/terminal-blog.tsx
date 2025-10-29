@@ -23,7 +23,7 @@ const BLOGS: BlogEntry[] = [{ id: 1, title: "working on this!" }];
 
 interface TerminalBlogProps {
   onExit: () => void;
-  scrollRef?: React.RefObject<HTMLDivElement>;
+  scrollRef?: React.RefObject<HTMLDivElement | null>;
 }
 
 export default function TerminalBlog({ onExit, scrollRef }: TerminalBlogProps) {

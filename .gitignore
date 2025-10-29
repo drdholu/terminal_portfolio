@@ -37,5 +37,5 @@ next-env.d.ts
 
 .bolt
 
-spotify_api.md
+spotify*.md
 logs/

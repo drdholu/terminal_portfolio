@@ -205,4 +205,39 @@ interface TerminalSectionsProps {
   command: string;
 }
 
+export default function TerminalSections({ command }: TerminalSectionsProps) {
+  const normalized = command.trim().toLowerCase().replace(/\s+/g, "");
+  const key = normalized.slice(0, 3);
+  const section = sections[key];
 
+  if (!section) {
+    return (
+      <motion.div
+        variants={slideUpVariants}
+        initial="hidden"
+        animate="show"
+        transition={transitions.fast}
+        className="mt-2"
+      >
+        <p className={commonClasses.terminalMuted}>
+          Command not found. Type <span className={commonClasses.terminalPrompt}>help</span> for available commands.
+        </p>
+      </motion.div>
+    );
+  }
+
+  return (
+    <motion.div
+      variants={slideUpVariants}
+      initial="hidden"
+      animate="show"
+      transition={transitions.fast}
+      className="mt-2"
+    >
+      {section.title && (
+        <h2 className={`text-xl font-bold ${commonClasses.terminalPrompt}`}>{section.title}</h2>
+      )}
+      <div className="mt-2">{section.content}</div>
+    </motion.div>
+  );
+}
