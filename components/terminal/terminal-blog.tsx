@@ -111,7 +111,7 @@ export default function TerminalBlog({ onExit, scrollRef }: TerminalBlogProps) {
           return <MarkdownComponent />;
         case "help":
           return (
-            <ul className={`${listStyles.caret} ml-4 space-y-1 mt-1`}>
+            <ul className={`ml-4 space-y-1 mt-1`}>
               <li>
                 <span className={commonClasses.terminalPrompt}>ls</span> - list
                 available blogs

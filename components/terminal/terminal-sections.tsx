@@ -39,7 +39,7 @@ sections["blg"] = {
 const helpContent = {
   title: "Available Commands",
   content: (
-    <ul className={`${listStyles.caret} space-y-2`}>
+    <ul className={`space-y-2`}>
       {Object.keys(sections).map((cmd) => (
         <li key={cmd} className={commonClasses.interactive}>
           <span className={commonClasses.terminalPrompt}>{cmd}</span> - Display {sections[cmd].title}
@@ -65,7 +65,7 @@ function renderContent(key: string, data: any): React.ReactNode {
           {data.details.map((skill: any) => (
             <div key={skill.name} className="mb-4">
               <h3 className={`text-lg font-bold ${commonClasses.terminalPrompt}`}>{skill.name}</h3>
-              <ul className={`${listStyles.asterisk} ml-4 space-y-1`}>
+              <ul className={`ml-4 space-y-1`}>
                 {skill.technologies.map((tech: string) => (
                   <li key={tech} className={commonClasses.interactive}>
                     {tech}
@@ -108,7 +108,7 @@ function renderContent(key: string, data: any): React.ReactNode {
                 <span className="font-medium">{exp.company}</span> | <span className={commonClasses.terminalPrompt}>{exp.duration}</span>
               </p>
               {Array.isArray(exp.responsibilities) && exp.responsibilities.length > 0 && (
-                <ul className={`${listStyles.arrow} ml-4 mt-2 space-y-1`}>
+                <ul className={`ml-4 mt-2 space-y-1`}>
                   {exp.responsibilities.map((resp: string) => (
                     <li key={resp} className={commonClasses.terminalText}>{resp}</li>
                   ))}
@@ -136,7 +136,7 @@ function renderContent(key: string, data: any): React.ReactNode {
               <p className={commonClasses.terminalMuted}>
                 <span className="font-medium">{role.organization}</span> | <span className={commonClasses.terminalPrompt}>{role.duration}</span>
               </p>
-              <ul className={`${listStyles.arrow} ml-4 mt-2 space-y-1`}>
+              <ul className={`ml-4 mt-2 space-y-1`}>
                 {role.responsibilities.map((resp: string) => (
                   <li key={resp} className={commonClasses.terminalText}>{resp}</li>
                 ))}
@@ -232,12 +232,9 @@ export default function TerminalSections({ command }: TerminalSectionsProps) {
       initial="hidden"
       animate="show"
       transition={transitions.fast}
-      className="mt-2"
+      className="m-2"
     >
-      {section.title && (
-        <h2 className={`text-xl font-bold ${commonClasses.terminalPrompt}`}>{section.title}</h2>
-      )}
-      <div className="mt-2">{section.content}</div>
+      <div className="m-2">{section.content}</div>
     </motion.div>
   );
 }

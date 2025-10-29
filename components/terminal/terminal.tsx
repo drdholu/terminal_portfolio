@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { motion, useDragControls, useMotionValue } from "framer-motion";
+import { motion } from "framer-motion";
+import Draggable, { DraggableData, DraggableEvent } from "react-draggable";
 import { RotateCcw } from "lucide-react";
 import TerminalIntro from "./terminal-intro";
 import TerminalInput from "./terminal-input";
@@ -18,17 +19,13 @@ interface HistoryItem {
 export default function Terminal() {
   const INITIAL_X = 0;
   const INITIAL_Y = 0;
-  const CONSTRAINT_MARGIN = 20; // keep a bit inside the viewport
   const [input, setInput] = useState("");
   const [history, setHistory] = useState<string[]>([]);
   const terminalContentRef = useRef<HTMLDivElement>(null);
   const [blogMode, setBlogMode] = useState(false);
-  // Drag-related refs and values
-  const containerRef = useRef<HTMLDivElement>(null);
-  const dragControls = useDragControls();
-  const x = useMotionValue(INITIAL_X);
-  const y = useMotionValue(INITIAL_Y);
-  const [dragBounds, setDragBounds] = useState<{ top: number; right: number; bottom: number; left: number }>({ top: 0, right: 0, bottom: 0, left: 0 });
+  // Drag-related values (controlled for simple reset)
+  const [position, setPosition] = useState<{ x: number; y: number }>({ x: INITIAL_X, y: INITIAL_Y });
+  const nodeRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [hasMoved, setHasMoved] = useState(false);
 
@@ -51,30 +48,7 @@ export default function Terminal() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  useEffect(() => {
-    const updateBounds = () => {
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
-      setDragBounds({
-        left: -(rect.left - CONSTRAINT_MARGIN),
-        top: -(rect.top - CONSTRAINT_MARGIN),
-        right: vw - rect.right - CONSTRAINT_MARGIN,
-        bottom: vh - rect.bottom - CONSTRAINT_MARGIN,
-      });
-    };
-    updateBounds();
-    const ro = new ResizeObserver(updateBounds);
-    if (containerRef.current) ro.observe(containerRef.current);
-    window.addEventListener('resize', updateBounds);
-    window.addEventListener('orientationchange', updateBounds);
-    return () => {
-      ro.disconnect();
-      window.removeEventListener('resize', updateBounds);
-      window.removeEventListener('orientationchange', updateBounds);
-    };
-  }, []);
+  // No dynamic bounds: keep drag simple and predictable
 
   useEffect(() => {
     const cmd = input.trim().toLowerCase();
@@ -99,46 +73,30 @@ export default function Terminal() {
   };
 
   return (
-    <motion.div 
-      ref={containerRef}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={transitions.slow}
-      className={`terminal-window${isDragging ? " select-none" : ""}`}
-      drag
-      dragControls={dragControls}
-      dragListener={false}
-      dragConstraints={dragBounds}
-      dragMomentum={false}
-      style={{ x, y }}
-      onDragStart={() => setIsDragging(true)}
-      onDragEnd={() => {
+    <Draggable
+      handle=".window-header"
+      cancel=".reset-drag-cancel, input, textarea, button, a, .no-drag"
+      position={position}
+      nodeRef={nodeRef}
+      onStart={() => setIsDragging(true)}
+      onDrag={(e: DraggableEvent, data: DraggableData) => {
+        setPosition({ x: data.x, y: data.y });
+      }}
+      onStop={(e: DraggableEvent, data: DraggableData) => {
         setIsDragging(false);
-        const moved = Math.abs(x.get() - INITIAL_X) > 0.5 || Math.abs(y.get() - INITIAL_Y) > 0.5;
+        const moved = Math.abs(data.x - INITIAL_X) > 0.5 || Math.abs(data.y - INITIAL_Y) > 0.5;
         setHasMoved(moved);
       }}
     >
+      <motion.div 
+        ref={nodeRef}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={transitions.slow}
+        className={`terminal-window${isDragging ? " select-none" : ""}`}
+      >
       <div 
         className={`window-header ${isDragging ? "cursor-grabbing" : "cursor-grab"} select-none`}
-        onPointerDown={(e) => {
-          // Gate dragging to fine pointers (desktop), ignore touch
-          const isFinePointer = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(pointer: fine)').matches;
-          if (!isFinePointer || (e as any).pointerType === 'touch') return;
-          e.preventDefault();
-          // Recalculate bounds at the moment of drag start so current position/size are accounted for
-          if (containerRef.current) {
-            const rect = containerRef.current.getBoundingClientRect();
-            const vw = window.innerWidth;
-            const vh = window.innerHeight;
-            setDragBounds({
-              left: -(rect.left - CONSTRAINT_MARGIN),
-              top: -(rect.top - CONSTRAINT_MARGIN),
-              right: vw - rect.right - CONSTRAINT_MARGIN,
-              bottom: vh - rect.bottom - CONSTRAINT_MARGIN,
-            });
-          }
-          dragControls.start(e);
-        }}
       >
         <div className="window-controls">
           <div className="window-button window-button-close" />
@@ -146,22 +104,19 @@ export default function Terminal() {
           <div className="window-button window-button-maximize" />
         </div>
         <div className="window-title">{terminalConfig.windowTitle}</div>
-        {(isDragging || hasMoved) && (
-          <div className="ml-auto flex items-center pl-2">
-            <button
-              type="button"
-              aria-label="Reset position"
-              className="inline-flex items-center justify-center rounded px-2 py-1 text-foreground/70 hover:text-foreground transition-colors"
-              onPointerDown={(e) => e.stopPropagation()}
-              onClick={() => {
-                x.set(INITIAL_X);
-                y.set(INITIAL_Y);
-                setHasMoved(false);
-              }}
-            >
-              <RotateCcw className="h-4 w-4" />
-            </button>
-          </div>
+        {hasMoved && (
+          <button
+            type="button"
+            aria-label="Reset position"
+            className="reset-drag-cancel absolute right-2 top-1/2 -translate-y-1/2 inline-flex h-6 w-6 items-center justify-center rounded p-0 text-foreground/60 hover:text-foreground transition-colors"
+            onMouseDown={(e) => e.stopPropagation()}
+            onClick={() => {
+              setPosition({ x: INITIAL_X, y: INITIAL_Y });
+              setHasMoved(false);
+            }}
+          >
+            <RotateCcw className="h-3.5 w-3.5" />
+          </button>
         )}
       </div>
       
@@ -195,6 +150,7 @@ export default function Terminal() {
           </>
         )}
       </motion.div>
-    </motion.div>
+      </motion.div>
+    </Draggable>
   );
 }

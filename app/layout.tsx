@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { JetBrains_Mono } from "next/font/google";
+import { Google_Sans_Code } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import CommandMenu from "@/components/command-menu";
@@ -7,7 +7,7 @@ import MatrixBackground from "@/components/matrix-background";
 import ThemeSelector from "@/components/theme-selector";
 // import MouseBlob from "@/components/mouse-blob";
 
-const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"] });
+const jetbrainsMono = Google_Sans_Code({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "it's Paras",
